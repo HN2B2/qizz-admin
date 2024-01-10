@@ -20,6 +20,7 @@
     "@mantine/modals": "^7.4.1",
     "@mantine/notifications": "^7.4.1",
     "@mantine/tiptap": "^7.4.1",
+    "@tabler/icons-react": "^2.45.0",
     "@tiptap/extension-link": "^2.1.15",
     "@tiptap/react": "^2.1.15",
     "@tiptap/starter-kit": "^2.1.15",
