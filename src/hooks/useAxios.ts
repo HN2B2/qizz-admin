@@ -3,8 +3,7 @@ import axios from "axios"
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE"
 
-axios.defaults.baseURL = "https://todo-api-zoeg.onrender.com/v1"
-// axios.defaults.baseURL = "http://localhost:8080"
+axios.defaults.baseURL = "http://localhost:8080"
 
 const useAxios = <T>(method: HttpMethod, url: string, body?: T) => {
     const [response, setResponse] = useState(null)
