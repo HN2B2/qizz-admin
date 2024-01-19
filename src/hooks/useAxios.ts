@@ -3,7 +3,7 @@ import axios from "axios"
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE"
 
-axios.defaults.baseURL = "http://localhost:8080"
+axios.defaults.baseURL = process.env.API_URL || "http://localhost:6868"
 
 const useAxios = <T>(method: HttpMethod, url: string, body?: T) => {
     const [response, setResponse] = useState(null)
