@@ -2,18 +2,21 @@ import Head from "next/head";
 import React from "react";
 import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout";
 import { useEffect, useState } from "react";
-import { Button, Flex, Title, getRadius, Modal, Box } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Title,
+  getRadius,
+  Modal,
+  Box,
+  TabsPanel,
+  Table,
+  ActionIcon,
+} from "@mantine/core";
 import { Breadcrumbs, Anchor, Text, Paper, Tabs } from "@mantine/core";
 import { useDisclosure, randomId } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import {
-  IconPhoto,
-  IconMessageCircle,
-  IconSettings,
-  IconBrandPagekit,
-} from "@tabler/icons-react";
-import {
-  Table,
   ScrollArea,
   UnstyledButton,
   Group,
@@ -30,6 +33,7 @@ import {
   IconDownload,
   IconCreativeCommons,
   IconPlus,
+  IconEdit,
 } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 
@@ -39,6 +43,33 @@ const breadcrumbsItems: BreadCrumbsItem[] = [
 ];
 const iconStyle = { width: rem(12), height: rem(12) };
 
+const data = [
+  {
+    id: "001",
+    name: "Athena Weissnat",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolore.",
+    created_at: "20-01-2024",
+    modified_at: "20-01-2024",
+  },
+  {
+    id: "002",
+    name: "Athena Weissnat",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolore.",
+    created_at: "20-01-2024",
+    modified_at: "20-01-2024",
+  },
+  {
+    id: "003",
+    name: "Athena Weissnat",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolore.",
+    created_at: "20-01-2024",
+    modified_at: "20-01-2024",
+  },
+];
+
 const CategoryPage = () => {
   const form = useForm({
     initialValues: {
@@ -46,6 +77,23 @@ const CategoryPage = () => {
       description: "",
     },
   });
+
+  const rows = data.map((row) => (
+    <Table.Tr key={row.name}>
+      <Table.Td>{row.id}</Table.Td>
+      <Table.Td>{row.name}</Table.Td>
+      <Table.Td>
+        <Text lineClamp={2}>{row.description}</Text>
+      </Table.Td>
+      <Table.Td>{row.created_at}</Table.Td>
+      <Table.Td>{row.modified_at}</Table.Td>
+      <Table.Td>
+        <ActionIcon variant="filled" aria-label="Settings">
+          <IconEdit style={{ width: "70%", height: "70%" }} stroke={1.5} />
+        </ActionIcon>
+      </Table.Td>
+    </Table.Tr>
+  ));
   const openModal = () =>
     modals.openConfirmModal({
       title: "Category Form",
@@ -70,7 +118,7 @@ const CategoryPage = () => {
     });
   return (
     <AdminLayout title="Category" breadcrumbs={breadcrumbsItems}>
-      <Paper>
+      <Paper shadow="md" style={{ marginBottom: "20px", marginTop: "10px" }}>
         <Flex justify="center" gap="lg">
           <TextInput
             placeholder="Search by any field"
@@ -88,23 +136,17 @@ const CategoryPage = () => {
             Create
           </Button>
         </Flex>
+      </Paper>
+      <Paper shadow="md" style={{ paddingTop: "10px" }}>
         <Tabs defaultValue="gallery">
-          <Tabs.List>
-            <Tabs.Tab
-              value="gallery"
-              leftSection={<IconBrandPagekit style={iconStyle} />}
-            >
-              Category
-            </Tabs.Tab>
-            <Tabs.Tab
-              value="messages"
-              leftSection={<IconBrandPagekit style={iconStyle} />}
-            >
-              Sub-Category
-            </Tabs.Tab>
-          </Tabs.List>
-
-          <Tabs.Panel value="gallery">
+          <TabsPanel
+            value="gallery"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              outline: "none",
+            }}
+          >
             <Table
               horizontalSpacing="md"
               verticalSpacing="xs"
@@ -113,52 +155,17 @@ const CategoryPage = () => {
             >
               <Table.Tbody>
                 <Table.Tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Company</th>
+                  <Table.Th>Id</Table.Th>
+                  <Table.Th>Name</Table.Th>
+                  <Table.Th>Description</Table.Th>
+                  <Table.Th>Created_at</Table.Th>
+                  <Table.Th>Modifed_at</Table.Th>
+                  <Table.Th>Edit</Table.Th>
                 </Table.Tr>
               </Table.Tbody>
-              <Table.Tbody>
-                {
-                  <Table.Tr>
-                    <Table.Td>
-                      {/* <Text fw={500} ta="center">
-                  Nothing found
-                </Text> */}
-                    </Table.Td>
-                  </Table.Tr>
-                }
-              </Table.Tbody>
+              <Table.Tbody>{rows}</Table.Tbody>
             </Table>
-          </Tabs.Panel>
-
-          <Tabs.Panel value="messages">
-            <Table
-              horizontalSpacing="md"
-              verticalSpacing="xs"
-              miw={700}
-              layout="fixed"
-            >
-              <Table.Tbody>
-                <Table.Tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Company</th>
-                </Table.Tr>
-              </Table.Tbody>
-              <Table.Tbody>
-                {
-                  <Table.Tr>
-                    <Table.Td>
-                      {/* <Text fw={500} ta="center">
-                  Nothing found
-                </Text> */}
-                    </Table.Td>
-                  </Table.Tr>
-                }
-              </Table.Tbody>
-            </Table>
-          </Tabs.Panel>
+          </TabsPanel>
         </Tabs>
       </Paper>
     </AdminLayout>
