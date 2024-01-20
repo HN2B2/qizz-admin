@@ -1,6 +1,6 @@
 import { Title, getRadius } from "@mantine/core";
 import Head from "next/head";
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout";
 import { useEffect, useState } from "react";
 import doAxios from "@/utils/doAxios";
 import { Breadcrumbs, Anchor } from "@mantine/core";
@@ -17,16 +17,13 @@ export default function Home() {
     fetchdata();
   }, []);
 
-  const items = [{ title: "Quiz Admin", href: "./" }].map((item, index) => (
-    <Anchor href={item.href} key={index}>
-      {item.title}
-    </Anchor>
-  ));
+  const breadcrumbsItems: BreadCrumbsItem[] = [
+    { title: "Quiz Admin", link: "./" },
+  ];
 
   return (
-    <AdminLayout>
-      <Breadcrumbs>{items}</Breadcrumbs>
-      {/* <Title order={1}>Qizz Admin</Title> */}
+    <AdminLayout breadcrumbs={breadcrumbsItems}>
+      <></>
       {/* <p>{data}</p> */}
     </AdminLayout>
   );

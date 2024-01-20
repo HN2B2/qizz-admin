@@ -1,22 +1,23 @@
 import Head from "next/head";
 import React from "react";
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout";
 import { useEffect, useState } from "react";
 import { Title, getRadius } from "@mantine/core";
-import { Breadcrumbs, Anchor } from "@mantine/core";
+import { Breadcrumbs, Anchor, Text, Paper } from "@mantine/core";
 
-const items = [
-  { title: "Quiz Admin", href: "./" },
-  { title: "Category", href: "./category" },
-].map((item, index) => (
-  <Anchor href={item.href} key={index}>
-    {item.title}
-  </Anchor>
-));
+const breadcrumbsItems: BreadCrumbsItem[] = [
+  { title: "Quiz Admin", link: "./" },
+  { title: "Category", link: "./category" },
+];
 const CategoryPage = () => {
   return (
-    <AdminLayout title="Category">
-      <Breadcrumbs>{items}</Breadcrumbs>
+    <AdminLayout title="Category" breadcrumbs={breadcrumbsItems}>
+      <Paper shadow="xs" p="xl">
+        <Text>
+          Use it to create cards, dropdowns, modals and other components that
+          require background with shadow
+        </Text>
+      </Paper>
     </AdminLayout>
   );
 };

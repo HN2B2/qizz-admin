@@ -160,7 +160,7 @@ const UserLayout = ({ title, breadcrumbs, children }: UserLayoutProps) => {
             <Breadcrumbs mb={"sm"}>
               {breadcrumbs.map((item, index) => (
                 <Link key={index} href={item.link || "#"}>
-                  {item.title}
+                  <span style={{ color: "#228be6" }}>{item.title}</span>
                 </Link>
               ))}
             </Breadcrumbs>
