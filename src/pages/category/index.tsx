@@ -2,6 +2,8 @@ import Head from "next/head";
 import React from "react";
 import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout";
 import { useEffect, useState } from "react";
+import { MultiSelect, Select } from "@mantine/core";
+import { Pagination } from "@mantine/core";
 import {
   Button,
   Flex,
@@ -68,6 +70,30 @@ const data = [
     created_at: "20-01-2024",
     modified_at: "20-01-2024",
   },
+  {
+    id: "004",
+    name: "Athena Weissnat",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolore.",
+    created_at: "20-01-2024",
+    modified_at: "20-01-2024",
+  },
+  {
+    id: "005",
+    name: "Athena Weissnat",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolore.",
+    created_at: "20-01-2024",
+    modified_at: "20-01-2024",
+  },
+  {
+    id: "006",
+    name: "Athena Weissnat",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, dolore.",
+    created_at: "20-01-2024",
+    modified_at: "20-01-2024",
+  },
 ];
 
 const CategoryPage = () => {
@@ -116,13 +142,15 @@ const CategoryPage = () => {
       onCancel: () => console.log("Cancel"),
       onConfirm: () => console.log("Save"),
     });
+  const [activePage, setPage] = useState(1);
   return (
     <AdminLayout title="Category" breadcrumbs={breadcrumbsItems}>
       <Paper shadow="md" style={{ marginBottom: "20px", marginTop: "10px" }}>
-        <Flex justify="center" gap="lg">
+        <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
           <TextInput
             placeholder="Search by any field"
             mb="md"
+            w={600}
             leftSection={
               <IconSearch
                 style={{ width: rem(24), height: rem(24) }}
@@ -132,41 +160,42 @@ const CategoryPage = () => {
             // value={search}
             // onChange={handleSearchChange}
           />
-          <Button onClick={openModal} rightSection={<IconPlus size={16} />}>
-            Create
-          </Button>
+          <Group mb="md">
+            <Select
+              placeholder="Sort by"
+              data={["Default", "Lasted", "Newest"]}
+              defaultValue={"Default"}
+            />
+            <Button onClick={openModal} rightSection={<IconPlus size={16} />}>
+              Create
+            </Button>
+          </Group>
         </Flex>
       </Paper>
       <Paper shadow="md" style={{ paddingTop: "10px" }}>
-        <Tabs defaultValue="gallery">
-          <TabsPanel
-            value="gallery"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              outline: "none",
-            }}
-          >
-            <Table
-              horizontalSpacing="md"
-              verticalSpacing="xs"
-              miw={700}
-              layout="fixed"
-            >
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Th>Id</Table.Th>
-                  <Table.Th>Name</Table.Th>
-                  <Table.Th>Description</Table.Th>
-                  <Table.Th>Created_at</Table.Th>
-                  <Table.Th>Modifed_at</Table.Th>
-                  <Table.Th>Edit</Table.Th>
-                </Table.Tr>
-              </Table.Tbody>
-              <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
-          </TabsPanel>
-        </Tabs>
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={700}
+          layout="fixed"
+        >
+          <Table.Tbody>
+            <Table.Tr>
+              <Table.Th>Id</Table.Th>
+              <Table.Th>Name</Table.Th>
+              <Table.Th>Description</Table.Th>
+              <Table.Th>Created_at</Table.Th>
+              <Table.Th>Modifed_at</Table.Th>
+              <Table.Th>Edit</Table.Th>
+            </Table.Tr>
+          </Table.Tbody>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
+      </Paper>
+      <Paper shadow="md" mt={10} p={10}>
+        <Flex justify="center">
+          <Pagination total={10} value={activePage} onChange={setPage} />
+        </Flex>
       </Paper>
     </AdminLayout>
   );
