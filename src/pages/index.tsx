@@ -1,8 +1,5 @@
-import { Title, getRadius } from "@mantine/core"
-import Head from "next/head"
 import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout"
-import { useEffect, useState } from "react"
-import { Breadcrumbs, Anchor } from "@mantine/core"
+import Link from "next/link"
 
 export default function Home() {
     const breadcrumbsItems: BreadCrumbsItem[] = [
@@ -11,7 +8,7 @@ export default function Home() {
 
     return (
         <AdminLayout breadcrumbs={breadcrumbsItems}>
-            <></>
+            <Link href="/auth/logout">Logout</Link>
         </AdminLayout>
     )
 }

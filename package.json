@@ -27,6 +27,7 @@
     "axios": "^1.6.5",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
+    "jose": "^5.2.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
