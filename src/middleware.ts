@@ -37,8 +37,8 @@ export const middleware = async (req: NextRequest) => {
 
     const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname)
     const isAuthRoute = authRoutes.includes(req.nextUrl.pathname)
-    const protectedRoute = protectedRoutes.find(
-        (route) => route.path === req.nextUrl.pathname
+    const protectedRoute = protectedRoutes.find((route) =>
+        req.nextUrl.pathname.startsWith(route.path)
     )
     const isProtectedRoute = !!protectedRoute
 

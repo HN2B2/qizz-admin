@@ -12,5 +12,5 @@ export default interface UserResponse {
     role: UserRole
     displayName: string
     createdAt: string
-    updatedAt: string
+    modifiedAt: string
 }
