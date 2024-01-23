@@ -108,7 +108,7 @@ const UserLayout = ({ title, breadcrumbs, children }: UserLayoutProps) => {
         }}
         padding="md"
       >
-        <AppShell.Header>
+        {/* <AppShell.Header>
           <Group h="100%" px="md" justify="space-between">
             <Group h="100%">
               <Burger
@@ -142,7 +142,7 @@ const UserLayout = ({ title, breadcrumbs, children }: UserLayoutProps) => {
               </ActionIcon>
             </Group>
           </Group>
-        </AppShell.Header>
+        </AppShell.Header> */}
         <AppShell.Navbar p="md">
           {navbarItems.map((item, index) => (
             <NavLink
