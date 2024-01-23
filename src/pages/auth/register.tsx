@@ -23,6 +23,7 @@ import { useForm } from "@mantine/form"
 import { useDisclosure, useHotkeys, useLocalStorage } from "@mantine/hooks"
 import { notifications } from "@mantine/notifications"
 import { IconBrandGoogleFilled, IconCheck, IconX } from "@tabler/icons-react"
+import Head from "next/head"
 import { useRouter } from "next/router"
 
 const requirements = [
@@ -70,15 +71,11 @@ function getStrength(password: string) {
 
 const RegisterPage = () => {
     const router = useRouter()
-    const [token, setToken] = useLocalStorage({
-        key: "accessToken",
-    })
+
     const [user, setUser] = useLocalStorage<UserResponse>({
         key: "user",
     })
-    if (token) {
-        router.push("/")
-    }
+
     const registerForm = useForm({
         initialValues: {
             email: "",
@@ -145,7 +142,6 @@ const RegisterPage = () => {
                 "/auth/register",
                 registerForm.values as RegisterRequest
             )
-            setToken(data.token)
             setUser(data.user)
             router.push("/")
         } catch (error) {
@@ -161,101 +157,112 @@ const RegisterPage = () => {
 
     useHotkeys([["enter", handleRegister]])
     return (
-        <Flex align={"center"} justify={"center"} w={"100%"} h={"100vh"}>
-            <CustomLoadingOverlay />
-            <Container size="xl">
-                <Paper
-                    withBorder
-                    shadow="md"
-                    p={30}
-                    mt={20}
-                    radius="md"
-                    w={"400px"}
-                >
-                    <Title mb={16} order={2}>
-                        Register
-                    </Title>
-                    <TextInput
-                        label="Email"
-                        placeholder="email@qizz.tech"
-                        required
-                        {...registerForm.getInputProps("email")}
-                    />
-                    <TextInput
-                        label="Username"
-                        placeholder="Your username"
-                        required
-                        mt="md"
-                        {...registerForm.getInputProps("username")}
-                    />
-                    <Popover
-                        opened={popoverOpened}
-                        position="bottom"
-                        width="target"
-                        transitionProps={{ transition: "pop" }}
+        <>
+            <Head>
+                <title>Register | Qizz</title>
+            </Head>
+            <Flex align={"center"} justify={"center"} w={"100%"} h={"100vh"}>
+                <Container size="xl">
+                    <Paper
+                        withBorder
+                        shadow="md"
+                        p={30}
+                        mt={20}
+                        radius="md"
+                        w={"400px"}
                     >
-                        <Popover.Target>
-                            <div
-                                onFocusCapture={openPopover}
-                                onBlurCapture={closePopover}
-                            >
-                                <PasswordInput
-                                    label="Password"
-                                    placeholder="Your password"
-                                    required
-                                    mt="md"
-                                    {...registerForm.getInputProps("password")}
+                        <Title mb={16} order={2}>
+                            Register
+                        </Title>
+                        <TextInput
+                            label="Email"
+                            placeholder="email@qizz.tech"
+                            required
+                            {...registerForm.getInputProps("email")}
+                        />
+                        <TextInput
+                            label="Username"
+                            placeholder="Your username"
+                            required
+                            mt="md"
+                            {...registerForm.getInputProps("username")}
+                        />
+                        <Popover
+                            opened={popoverOpened}
+                            position="bottom"
+                            width="target"
+                            transitionProps={{ transition: "pop" }}
+                        >
+                            <Popover.Target>
+                                <div
+                                    onFocusCapture={openPopover}
+                                    onBlurCapture={closePopover}
+                                >
+                                    <PasswordInput
+                                        label="Password"
+                                        placeholder="Your password"
+                                        required
+                                        mt="md"
+                                        {...registerForm.getInputProps(
+                                            "password"
+                                        )}
+                                    />
+                                </div>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <Progress
+                                    color={color}
+                                    value={strength}
+                                    size={5}
+                                    mb="xs"
                                 />
-                            </div>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                            <Progress
-                                color={color}
-                                value={strength}
-                                size={5}
-                                mb="xs"
-                            />
-                            <PasswordRequirement
-                                label="Includes at least 6 characters"
-                                meets={registerForm.values.password.length > 5}
-                            />
-                            {checks}
-                        </Popover.Dropdown>
-                    </Popover>
-                    <Button
-                        fullWidth
-                        mt="xl"
-                        mb={12}
-                        loading={loading}
-                        onClick={handleRegister}
-                    >
-                        Sign in
-                    </Button>
-                    <Divider label="Or continue with" />
-                    <Button
-                        fullWidth
-                        my="md"
-                        variant="default"
-                        leftSection={<IconBrandGoogleFilled size={"1rem"} />}
-                        onClick={() =>
-                            notifications.show({
-                                title: "Error",
-                                message: "This feature is not available yet",
-                                color: "red",
-                            })
-                        }
-                    >
-                        Google
-                    </Button>
-                    <Text c="dimmed" size="sm" ta="center" mt={5}>
-                        Have account?{" "}
-                        <Anchor size="sm" component="a" href="/auth/login">
-                            Login now
-                        </Anchor>
-                    </Text>
-                </Paper>
-            </Container>
-        </Flex>
+                                <PasswordRequirement
+                                    label="Includes at least 6 characters"
+                                    meets={
+                                        registerForm.values.password.length > 5
+                                    }
+                                />
+                                {checks}
+                            </Popover.Dropdown>
+                        </Popover>
+                        <Button
+                            fullWidth
+                            mt="xl"
+                            mb={12}
+                            loading={loading}
+                            onClick={handleRegister}
+                        >
+                            Register
+                        </Button>
+                        <Divider label="Or continue with" />
+                        <Button
+                            fullWidth
+                            my="md"
+                            variant="default"
+                            leftSection={
+                                <IconBrandGoogleFilled size={"1rem"} />
+                            }
+                            onClick={() =>
+                                notifications.show({
+                                    title: "Error",
+                                    message:
+                                        "This feature is not available yet",
+                                    color: "red",
+                                })
+                            }
+                        >
+                            Google
+                        </Button>
+                        <Text c="dimmed" size="sm" ta="center" mt={5}>
+                            Have account?{" "}
+                            <Anchor size="sm" component="a" href="/auth/login">
+                                Login now
+                            </Anchor>
+                        </Text>
+                    </Paper>
+                </Container>
+            </Flex>
+        </>
     )
 }
 
