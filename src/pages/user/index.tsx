@@ -10,6 +10,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { ActionIcon } from "@mantine/core";
 import { IconAdjustments } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
+import axios from "axios";
 
 import {
   Modal,
@@ -25,7 +26,7 @@ import {
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaBan } from "react-icons/fa";
 import { Stepper, TextInput, PasswordInput, Code } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, matchesField } from "@mantine/form";
 import {
   Table,
   Checkbox,
@@ -46,123 +47,61 @@ import {
 } from "@tabler/icons-react";
 import { BsThreeDots } from "react-icons/bs";
 import { TiUserAddOutline } from "react-icons/ti";
+import { UserResponse } from "@/types/user";
+import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
+import { instance } from "@/utils";
+import { Badge } from "@mantine/core";
+import CreateModal from "./create.modal.tsx/create.modal";
 const breadcrumbsItems: BreadCrumbsItem[] = [
   { title: "Quiz Admin", link: "./" },
   { title: "User", link: "./user" },
 ];
 
-const data = [
-  {
-    id: "1",
-    avatar:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png",
-    name: "Robert Wolfkisser",
-    role: "Admin",
-    email: "rob_wolf@gmail.com",
-  },
-  {
-    id: "2",
-    avatar:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-7.png",
-    name: "Jill Jailbreaker",
-    role: "Staff",
-    email: "jj@breaker.com",
-  },
-  {
-    id: "3",
-    avatar:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png",
-    name: "Henry Silkeater",
-    role: "User",
-    email: "henry@silkeater.io",
-  },
-  {
-    id: "4",
-    avatar:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-3.png",
-    name: "Bill Horsefighter",
-    role: "User",
-    email: "bhorsefighter@gmail.com",
-  },
-  {
-    id: "5",
-    avatar:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-10.png",
-    name: "Jeremy Footviewer",
-    role: "User",
-    email: "jeremy@foot.dev",
-  },
-];
-
-const UserPage = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-
-  // const [openUpdateRole, { openUpdateRole, closeUpdateRole }] = useDisclosure(false);
-  const [selection, setSelection] = useState(["1"]);
-  const toggleRow = (id: string) =>
-    setSelection((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id]
-    );
-  const toggleAll = () =>
-    setSelection((current) =>
-      current.length === data.length ? [] : data.map((item) => item.id)
-    );
-
-  const [submittedValues, setSubmittedValues] = useState("");
-
-  const form = useForm({
-    initialValues: {
-      username: "",
-      password: "",
-      confirmPassword: "",
-      name: "",
-      email: "",
-      role: "",
-    },
-    
-    validate: (values) => {
-      
-      if (active === 0) {
-        return {
-          username:
-            values.username.trim().length < 6
-              ? "Username must include at least 6 characters"
-              : null,
-          password:
-            values.password.length < 6
-              ? "Password must include at least 6 characters"
-              : null,
-        };
-      }
-
-      if (active === 1) {
-        return {
-          name:
-            values.name.trim().length < 2
-              ? "Name must include at least 2 characters"
-              : null,
-          email: /^\S+@\S+$/.test(values.email) ? null : "Invalid email",
-          role: values.role ? null : "Please select a role",
-        };
-      }
-
-      return {};
-    },
-    
+//fetch data
+const UserPage = (props: GetAllUSerResponse) => {
+  const [users, setUsers] = useState<GetAllUSerResponse>({
+    data: [],
+    total: 0,
   });
 
-  const rows = data.map((item) => {
-    const selected = selection.includes(item.id);
+  const fetchDataUsers = async () => {
+    const res = await instance.get("/users");
+    setUsers(res.data);
+  };
+
+  useEffect(() => {
+    fetchDataUsers();
+  });
+//fech data
+
+ 
+
+  // const handleColorRole = (role: string) => {
+  //   if (role === "ADMIN") {
+  //     return "cyan";
+  //   } else if (role === "STAFF") {
+  //     return "teal";
+  //   } else if (role === "USER") {
+  //     return "lime";
+  //   } else {
+  //     return "red";
+  //   }
+  // };
+
+   //table
+  const rows = users.data.map((item, index) => {
     return (
-      <Table.Tr key={item.id} className={cx({ ["active"]: selected })}>
+      <Table.Tr key={item.id}>
         <Table.Td></Table.Td>
         <Table.Td>
           <Group gap="sm">
-            <Avatar size={26} src={item.avatar} radius={26} />
+            <Avatar
+              size={26}
+              src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
+              radius={26}
+            />
             <Text size="sm" fw={500}>
-              {item.name}
+              {item.username}
             </Text>
           </Group>
         </Table.Td>
@@ -181,42 +120,6 @@ const UserPage = () => {
 
             <Menu.Dropdown>
               <Menu.Item
-                onClick={() => {
-                  modals.open({
-                    title: "Update Role for User",
-                    children: (
-                      <>
-                        <Box maw={340} mx="auto">
-                          <form
-                            onSubmit={form.onSubmit((values) =>
-                              setSubmittedValues(
-                                JSON.stringify(values, null, 2)
-                              )
-                            )}
-                          >
-                            <Select
-                              mt="md"
-                              comboboxProps={{ withinPortal: true }}
-                              data={["Admin", "Staff", "User"]}
-                              defaultValue={`${form.values.role}`}
-                              placeholder="Pick one"
-                              label="Pick role"
-                              {...form.getInputProps("role")}
-                            />
-                            <Button
-                              type="submit"
-                              fullWidth
-                              onClick={() => modals.closeAll()}
-                              mt="md"
-                            >
-                              Submit
-                            </Button>
-                          </form>
-                        </Box>
-                      </>
-                    ),
-                  });
-                }}
                 leftSection={
                   <FaRegUser style={{ width: rem(14), height: rem(14) }} />
                 }
@@ -225,37 +128,6 @@ const UserPage = () => {
               </Menu.Item>
 
               <Menu.Item
-                onClick={() =>
-                  modals.open({
-                    title: "Change Password",
-                    children: (
-                      <Box maw={340} mx="auto">
-                        <form
-                          onSubmit={form.onSubmit((values) =>
-                            console.log(values)
-                          )}
-                        >
-                          <PasswordInput
-                            label="Password"
-                            placeholder="Password"
-                            {...form.getInputProps("password")}
-                          />
-
-                          <PasswordInput
-                            mt="sm"
-                            label="Confirm password"
-                            placeholder="Confirm password"
-                            {...form.getInputProps("confirmPassword")}
-                          />
-
-                          <Group justify="flex-end" mt="md">
-                            <Button type="submit">Submit</Button>
-                          </Group>
-                        </form>
-                      </Box>
-                    ),
-                  })
-                }
                 leftSection={
                   <RiLockPasswordLine
                     style={{ width: rem(14), height: rem(14) }}
@@ -264,6 +136,7 @@ const UserPage = () => {
               >
                 Change Password
               </Menu.Item>
+
               <Menu.Item
                 color="red"
                 leftSection={
@@ -278,25 +151,16 @@ const UserPage = () => {
       </Table.Tr>
     );
   });
+  //end table
 
-  const [active, setActive] = useState(0);
 
-  const nextStep = () =>
-    setActive((current) => {
-      if (form.validate().hasErrors) {
-        return current;
-      }
-      return current < 3 ? current + 1 : current;
-    });
-
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
-
-  const [openModal, setOpenModal] = useState(false);
 
   const demoProps = {
     mt: "md",
   };
+  //end feature: Add User
+
+  const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
 
   return (
     <AdminLayout title="User" breadcrumbs={breadcrumbsItems}>
@@ -324,70 +188,13 @@ const UserPage = () => {
                 />
 
                 <Group mb="md">
-                  <Button onClick={open}>Add User</Button>
-                  <Modal opened={opened} onClose={close} title="Add User">
-                    <Stepper active={active}>
-                      <Stepper.Step
-                        label="First step"
-                        description="Profile settings"
-                      >
-                        <TextInput
-                          label="Username"
-                          placeholder="Username"
-                          {...form.getInputProps("username")}
-                        />
-                        <PasswordInput
-                          mt="md"
-                          label="Password"
-                          placeholder="Password"
-                          {...form.getInputProps("password")}
-                        />
-                      </Stepper.Step>
-
-                      <Stepper.Step
-                        label="Final step"
-                        description="Personal information"
-                      >
-                        <TextInput
-                          label="Name"
-                          placeholder="Name"
-                          {...form.getInputProps("name")}
-                        />
-                        <TextInput
-                          mt="md"
-                          label="Email"
-                          placeholder="Email"
-                          {...form.getInputProps("email")}
-                        />
-                        <Select
-                          mt="md"
-                          comboboxProps={{ withinPortal: true }}
-                          data={["Admin", "Staff", "User"]}
-                          placeholder="Pick one"
-                          label="Pick role"
-                          {...form.getInputProps("role")}
-                        />
-                      </Stepper.Step>
-
-                      <Stepper.Completed>
-                        Completed! Form values:
-                        <Code block mt="xl">
-                          {JSON.stringify(form.values, null, 2)}
-                        </Code>
-                      </Stepper.Completed>
-                    </Stepper>
-
-                    <Group justify="flex-end" mt="xl">
-                      {active !== 0 && (
-                        <Button variant="default" onClick={prevStep}>
-                          Back
-                        </Button>
-                      )}
-                      {active !== 3 && (
-                        <Button onClick={nextStep}>Next step</Button>
-                      )}
-                    </Group>
-                  </Modal>
+                  <Button onClick={() => setShowModalCreate(true)}>
+                    Add User
+                  </Button>
+                  <CreateModal
+                    showModalCreate={showModalCreate}
+                    setShowModalCreate={setShowModalCreate}
+                  />
                 </Group>
               </Flex>
             </Paper>
