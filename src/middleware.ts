@@ -51,10 +51,16 @@ export const middleware = async (req: NextRequest) => {
     }
 
     if (isProtectedRoute) {
-        if (protectedRoute.roles.includes(decodedUserData.role)) {
+        if (protectedRoute.roles.includes(decodedUserData?.role)) {
             return NextResponse.next()
         } else {
-            return NextResponse.redirect(new URL("/auth/logout", req.url))
+            const response = NextResponse.redirect(
+                new URL("/auth/login", req.url)
+            )
+            response.cookies.set("error", "Forbidden")
+            response.cookies.set("token", "", { expires: new Date(0) })
+            response.cookies.set("user", "", { expires: new Date(0) })
+            return response
         }
     }
 

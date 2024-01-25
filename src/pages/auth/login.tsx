@@ -20,6 +20,7 @@ import { notifications } from "@mantine/notifications"
 import { IconBrandGoogleFilled } from "@tabler/icons-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 const LoginPage = () => {
     const [_, setUser] = useLocalStorage<UserResponse>({
@@ -154,16 +155,6 @@ const LoginPage = () => {
                         >
                             Google
                         </Button>
-                        <Text c="dimmed" size="sm" ta="center" mt={5}>
-                            Do not have an account yet?{" "}
-                            <Anchor
-                                size="sm"
-                                component="a"
-                                href="/auth/register"
-                            >
-                                Create account
-                            </Anchor>
-                        </Text>
                     </Paper>
                 </Container>
             </Flex>
