@@ -13,4 +13,5 @@ export default interface UserResponse {
     displayName: string
     createdAt: string
     modifiedAt: string
+    banned: boolean
 }

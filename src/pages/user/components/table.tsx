@@ -18,6 +18,7 @@ import { FaBan, FaRegUser } from "react-icons/fa6";
 import UpdateRoleModal from "./updateRole.modal";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { modals } from "@mantine/modals";
+import BannedModal from "./banned.modal";
 
 function AppTable() {
   const [users, setUsers] = useState<GetAllUSerResponse>({
@@ -48,7 +49,10 @@ function AppTable() {
         </Table.Thead>
         <Table.Tbody>
           {users.data.map((item, index) => (
-            <Table.Tr key={item.id}>
+            <Table.Tr
+              key={item.id}
+              bg={item.banned === false ? "" : "var(--mantine-color-red-light)"}
+            >
               <Table.Td></Table.Td>
               <Table.Td>
                 <Group gap="sm">
@@ -121,15 +125,55 @@ function AppTable() {
                     >
                       Change Password
                     </Menu.Item>
-
-                    <Menu.Item
-                      color="red"
-                      leftSection={
-                        <FaBan style={{ width: rem(14), height: rem(14) }} />
-                      }
-                    >
-                      Banned
-                    </Menu.Item>
+                    {item.banned === false ? (
+                      <Menu.Item
+                        onClick={() => {
+                          modals.open({
+                            title: "Ban User",
+                            children: (
+                              <>
+                                <BannedModal
+                                  userRole={item.role}
+                                  userId={item.id}
+                                  username={item.username}
+                                  banned={item.banned}
+                                />
+                              </>
+                            ),
+                          });
+                        }}
+                        color="red"
+                        leftSection={
+                          <FaBan style={{ width: rem(14), height: rem(14) }} />
+                        }
+                      >
+                        Banned
+                      </Menu.Item>
+                    ) : (
+                      <Menu.Item
+                        onClick={() => {
+                          modals.open({
+                            title: "Remove Banned",
+                            children: (
+                              <>
+                                <BannedModal
+                                  userRole={item.role}
+                                  userId={item.id}
+                                  username={item.username}
+                                  banned={item.banned}
+                                />
+                              </>
+                            ),
+                          });
+                        }}
+                        color="green"
+                        leftSection={
+                          <FaBan style={{ width: rem(14), height: rem(14) }} />
+                        }
+                      >
+                        Remove Banned
+                      </Menu.Item>
+                    )}
                   </Menu.Dropdown>
                 </Menu>
               </Table.Td>
