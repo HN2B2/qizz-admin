@@ -51,7 +51,9 @@ import { UserResponse } from "@/types/user";
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { instance } from "@/utils";
 import { Badge } from "@mantine/core";
-import CreateModal from "./create.modal.tsx/create.modal";
+import CreateModal from "./components/create.modal";
+import UpdateRoleModal from "./components/updateRole.modal";
+import AppTable from "./components/table";
 const breadcrumbsItems: BreadCrumbsItem[] = [
   { title: "Quiz Admin", link: "./" },
   { title: "User", link: "./user" },
@@ -72,24 +74,12 @@ const UserPage = (props: GetAllUSerResponse) => {
   useEffect(() => {
     fetchDataUsers();
   });
-//fech data
+  //fech data
 
- 
-
-  // const handleColorRole = (role: string) => {
-  //   if (role === "ADMIN") {
-  //     return "cyan";
-  //   } else if (role === "STAFF") {
-  //     return "teal";
-  //   } else if (role === "USER") {
-  //     return "lime";
-  //   } else {
-  //     return "red";
-  //   }
-  // };
-
-   //table
+  //table
   const rows = users.data.map((item, index) => {
+    // const [showModalUpdate, setShowModalUpdate] = useState<boolean>(false);
+
     return (
       <Table.Tr key={item.id}>
         <Table.Td></Table.Td>
@@ -106,7 +96,22 @@ const UserPage = (props: GetAllUSerResponse) => {
           </Group>
         </Table.Td>
         <Table.Td>{item.email}</Table.Td>
-        <Table.Td>{item.role}</Table.Td>
+        <Table.Td>
+          <Badge
+            variant="light"
+            color={
+              item.role === "ADMIN"
+                ? "cyan"
+                : item.role === "STAFF"
+                ? "teal"
+                : item.role === "USER"
+                ? "green"
+                : "red"
+            }
+          >
+            {item.role}
+          </Badge>
+        </Table.Td>
         <Table.Td>
           <Menu shadow="md" width={170}>
             <Menu.Target>
@@ -125,6 +130,11 @@ const UserPage = (props: GetAllUSerResponse) => {
                 }
               >
                 Update Role
+                {/* <UpdateRoleModal
+                  userId={item.id}
+                  showModalUpdate={showModalUpdate}
+                  setshowModalUpdate={setShowModalUpdate}
+                /> */}
               </Menu.Item>
 
               <Menu.Item
@@ -152,8 +162,6 @@ const UserPage = (props: GetAllUSerResponse) => {
     );
   });
   //end table
-
-
 
   const demoProps = {
     mt: "md",
@@ -199,7 +207,7 @@ const UserPage = (props: GetAllUSerResponse) => {
               </Flex>
             </Paper>
 
-            <Table miw={800} verticalSpacing="sm">
+            {/* <Table miw={800} verticalSpacing="sm">
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th style={{ width: rem(40) }}></Table.Th>
@@ -210,7 +218,8 @@ const UserPage = (props: GetAllUSerResponse) => {
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>{rows}</Table.Tbody>
-            </Table>
+            </Table> */}
+            <AppTable />
           </Container>
         </ScrollArea>
       </>
