@@ -1,31 +1,20 @@
-"use client";
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalTitle,
-  PasswordInput,
-  TextInput,
-  Group,
-  Badge,
-  NativeSelect,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { getServerErrorNoti, instance } from "@/utils";
-import { notifications } from "@mantine/notifications";
-import PostUserRequest from "@/types/users/PostUserRequest";
 import PutRoleUserRequest from "@/types/users/PutRoleUserRequest";
-
+import { getServerErrorNoti, instance } from "@/utils";
+import { Button, Group, Select } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import { modals } from "@mantine/modals";
 interface IProps {
-  showModalUpdate: boolean;
-  setshowModalUpdate: (v: boolean) => void;
   userId: number;
 }
+
 function UpdateRoleModal(props: IProps) {
-  const { showModalUpdate, setshowModalUpdate } = props;
   const { userId } = props;
+  const data = [
+    { value: "ADMIN" as any, label: "ADMIN" },
+    { value: "STAFF" as any, label: "STAFF" },
+    { value: "USER" as any, label: "USER" },
+  ];
   const form = useForm({
     initialValues: {
       role: "",
@@ -36,11 +25,16 @@ function UpdateRoleModal(props: IProps) {
     },
   });
 
-  const handleSubmit = async () => {
+  const formOnSubmit = form.onSubmit(
+    (values) => console.log(values),
+    (errors) => console.error(errors)
+  );
+
+  const handleUpdateRole = async (id: number) => {
     form.validate();
     try {
       const { data }: { data: PutRoleUserRequest } = await instance.put(
-        `/users/${userId}`,
+        `/users/${id}`,
         form.values
       );
       notifications.show({
@@ -48,7 +42,7 @@ function UpdateRoleModal(props: IProps) {
         message: "Update user successfully",
         color: "green",
       });
-      handleCloseModal();
+      modals.closeAll();
     } catch (error) {
       notifications.show({
         title: "Error",
@@ -58,43 +52,25 @@ function UpdateRoleModal(props: IProps) {
     }
   };
 
-  const handleCloseModal = () => {
-    form.values.role = "";
-    setshowModalUpdate(false);
-  };
-
   return (
-    <>
-      <Modal.Root opened={showModalUpdate} onClose={() => handleCloseModal()}>
-        <Modal.Overlay />
-        <ModalContent>
-          <ModalHeader>
-            <ModalTitle fw={700}>Update User</ModalTitle>
-            <Modal.CloseButton />
-          </ModalHeader>
-          <ModalBody>
-            <NativeSelect
-              label="Choose a role"
-              description="Choose a role"
-              data={["ADMIN", "STAFF", "USER"]}
-            />
-            <Group justify="flex-end" mt="md" gap="xs">
-              <Button variant="default" onClick={() => handleCloseModal()}>
-                Close
-              </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                onClick={() => handleSubmit()}
-              >
-                Save
-              </Button>
-            </Group>
-          </ModalBody>
-        </ModalContent>
-      </Modal.Root>
-    </>
+    <form onSubmit={formOnSubmit}>
+      <Select
+        label="Role"
+        placeholder="Pick a role"
+        data={data}
+        {...form.getInputProps("role")}
+      />
+
+      <Group mt="md">
+        <Button
+          type="submit"
+          fullWidth
+          onClick={() => handleUpdateRole(userId)}
+        >
+          Save
+        </Button>
+      </Group>
+    </form>
   );
 }
-
 export default UpdateRoleModal;

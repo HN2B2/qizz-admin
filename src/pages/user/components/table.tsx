@@ -7,7 +7,6 @@ import {
   Badge,
   Group,
   Menu,
-  Select,
   Table,
   Text,
   rem,
@@ -18,6 +17,7 @@ import { IconAdjustments } from "@tabler/icons-react";
 import { FaBan, FaRegUser } from "react-icons/fa6";
 import UpdateRoleModal from "./updateRole.modal";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { modals } from "@mantine/modals";
 
 function AppTable() {
   const [users, setUsers] = useState<GetAllUSerResponse>({
@@ -34,8 +34,6 @@ function AppTable() {
     fetchDataUsers();
   });
 
-  const [showModalUpdate, setShowModalUpdate] = useState<boolean>(false);
-  const rolesData = ["ADMIN", "USER", "STAFF"];
   return (
     <>
       <Table miw={800} verticalSpacing="sm">
@@ -66,7 +64,7 @@ function AppTable() {
               </Table.Td>
               <Table.Td>{item.email}</Table.Td>
 
-              {/* <Table.Td>
+              <Table.Td>
                 <Badge
                   variant="light"
                   color={
@@ -81,15 +79,6 @@ function AppTable() {
                 >
                   {item.role}
                 </Badge>
-              </Table.Td> */}
-
-              <Table.Td>
-                <Select
-                  data={rolesData}
-                  defaultValue={item.role}
-                  variant="unstyled"
-                  allowDeselect={false}
-                />
               </Table.Td>
 
               <Table.Td>
@@ -105,21 +94,24 @@ function AppTable() {
 
                   <Menu.Dropdown>
                     <Menu.Item
+                      onClick={() => {
+                        modals.open({
+                          title: "Update Role",
+                          children: (
+                            <>
+                              <UpdateRoleModal userId={item.id} />
+                            </>
+                          ),
+                        });
+                      }}
                       leftSection={
                         <FaRegUser
                           style={{ width: rem(14), height: rem(14) }}
                         />
                       }
                     >
-                      <div onClick={() => setShowModalUpdate(true)}>
-                        Update Role
-                      </div>
+                      Update Role
                     </Menu.Item>
-                    <UpdateRoleModal
-                      userId={item.id}
-                      showModalUpdate={showModalUpdate}
-                      setshowModalUpdate={setShowModalUpdate}
-                    />
                     <Menu.Item
                       leftSection={
                         <RiLockPasswordLine
