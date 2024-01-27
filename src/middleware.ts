@@ -60,7 +60,9 @@ export const middleware = async (req: NextRequest) => {
         if (protectedRoute.roles.includes(decodedUserData?.role)) {
             return NextResponse.next()
         } else {
-            return NextResponse.redirect(new URL("/404", req.url))
+            const url = req.nextUrl
+            url.pathname = `/404`
+            return NextResponse.rewrite(url)
         }
     }
 
