@@ -10,8 +10,8 @@ import { IconSearch } from "@tabler/icons-react";
 
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { instance } from "@/utils";
-import CreateModal from "./components/create.modal";
-import AppTable from "./components/table";
+import CreateModal from "../../components/manageUser/createModal";
+import AppTable from "../../components/manageUser/table";
 const breadcrumbsItems: BreadCrumbsItem[] = [
   { title: "Quiz Admin", link: "./" },
   { title: "User", link: "./user" },

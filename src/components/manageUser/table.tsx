@@ -15,10 +15,10 @@ import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { instance } from "@/utils";
 import { IconAdjustments } from "@tabler/icons-react";
 import { FaBan, FaRegUser } from "react-icons/fa6";
-import UpdateRoleModal from "./updateRole.modal";
+import UpdateRoleModal from "./updateRoleModal";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { modals } from "@mantine/modals";
-import BannedModal from "./banned.modal";
+import BannedModal from "./bannedModal";
 
 function AppTable() {
   const [users, setUsers] = useState<GetAllUSerResponse>({
