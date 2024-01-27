@@ -1,5 +1,5 @@
 "use client";
-
+import { Pagination } from "@mantine/core";
 import { useEffect, useState } from "react";
 import {
   ActionIcon,
@@ -181,6 +181,7 @@ function AppTable() {
           ))}
         </Table.Tbody>
       </Table>
+      <Pagination total={10} />
     </>
   );
 }
