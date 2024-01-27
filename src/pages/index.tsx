@@ -1,4 +1,4 @@
-import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout"
+import { BreadCrumbsItem, MainLayout } from "@/components/layouts"
 import Link from "next/link"
 
 export default function Home() {
@@ -7,8 +7,8 @@ export default function Home() {
     ]
 
     return (
-        <AdminLayout breadcrumbs={breadcrumbsItems}>
+        <MainLayout breadcrumbs={breadcrumbsItems}>
             <Link href="/auth/logout">Logout</Link>
-        </AdminLayout>
+        </MainLayout>
     )
 }

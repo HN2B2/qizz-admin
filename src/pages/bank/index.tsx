@@ -1,20 +1,20 @@
-import Head from "next/head";
-import React from "react";
-import AdminLayout, { BreadCrumbsItem } from "@/components/layouts/AdminLayout";
-import { useEffect, useState } from "react";
-import { Title, getRadius } from "@mantine/core";
-import { Breadcrumbs, Anchor } from "@mantine/core";
+import Head from "next/head"
+import React from "react"
+import { useEffect, useState } from "react"
+import { Title, getRadius } from "@mantine/core"
+import { Breadcrumbs, Anchor } from "@mantine/core"
+import { BreadCrumbsItem, MainLayout } from "@/components/layouts"
 
 const breadcrumbsItems: BreadCrumbsItem[] = [
-  { title: "Quiz Admin", link: "./" },
-  { title: "Bank", link: "./bank" },
-];
+    { title: "Quiz Admin", link: "./" },
+    { title: "Bank", link: "./bank" },
+]
 const UserPage = () => {
-  return (
-    <AdminLayout title="Bank" breadcrumbs={breadcrumbsItems}>
-      <p></p>
-    </AdminLayout>
-  );
-};
+    return (
+        <MainLayout title="Bank" breadcrumbs={breadcrumbsItems}>
+            <p></p>
+        </MainLayout>
+    )
+}
 
-export default UserPage;
+export default UserPage

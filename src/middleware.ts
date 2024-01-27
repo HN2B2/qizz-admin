@@ -4,10 +4,10 @@ import { UserResponse } from "./types/user"
 import { UserRole } from "./types/user/UserResponse"
 
 export const config = {
-    matcher: ["/", "/auth/:path*"],
+    matcher: ["/", "/auth/:path*", "/404"],
 }
 
-export const publicRoutes: String[] = []
+export const publicRoutes: String[] = ["/404"]
 export const authRoutes = ["/auth/login", "/auth/register"]
 export const protectedRoutes = [
     {
@@ -42,8 +42,14 @@ export const middleware = async (req: NextRequest) => {
     )
     const isProtectedRoute = !!protectedRoute
 
-    if (isPublicRoute || isAuthRoute) {
+    if (isPublicRoute) {
         return NextResponse.next()
+    }
+
+    if (isAuthRoute && !verifiedToken) {
+        return NextResponse.next()
+    } else if (isAuthRoute && verifiedToken) {
+        return NextResponse.redirect(new URL("/", req.url))
     }
 
     if (!token) {
@@ -54,13 +60,7 @@ export const middleware = async (req: NextRequest) => {
         if (protectedRoute.roles.includes(decodedUserData?.role)) {
             return NextResponse.next()
         } else {
-            const response = NextResponse.redirect(
-                new URL("/auth/login", req.url)
-            )
-            response.cookies.set("error", "Forbidden")
-            response.cookies.set("token", "", { expires: new Date(0) })
-            response.cookies.set("user", "", { expires: new Date(0) })
-            return response
+            return NextResponse.redirect(new URL("/404", req.url))
         }
     }
 
