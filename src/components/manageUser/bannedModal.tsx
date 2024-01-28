@@ -1,4 +1,3 @@
-import PutRoleUserRequest from "@/types/users/PutRoleUserRequest";
 import { getServerErrorNoti, instance } from "@/utils";
 import { Button, Group, Select, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";

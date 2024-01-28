@@ -1,4 +1,3 @@
-"use client";
 import { Pagination } from "@mantine/core";
 import { useEffect, useState } from "react";
 import {
@@ -12,28 +11,68 @@ import {
   rem,
 } from "@mantine/core";
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
-import { instance } from "@/utils";
 import { IconAdjustments } from "@tabler/icons-react";
 import { FaBan, FaRegUser } from "react-icons/fa6";
-import UpdateRoleModal from "./updateRoleModal";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { modals } from "@mantine/modals";
-import BannedModal from "./bannedModal";
+import { BannedModal, UpdateRoleModal } from ".";
+import { UserRole } from "@/types/users/UserRole";
+import { UserResponse } from "@/types/user";
 
-function AppTable() {
-  const [users, setUsers] = useState<GetAllUSerResponse>({
-    data: [],
-    total: 0,
-  });
+interface UserTableProps {
+  users: UserResponse[];
+  setUsers: (users: UserResponse[]) => void;
+}
 
-  const fetchDataUsers = async () => {
-    const res = await instance.get("/users");
-    setUsers(res.data);
+function UserTable({ users, setUsers }: UserTableProps) {
+  const getRoleBadge = (role: string) => {
+    return (
+      <Badge
+        variant="light"
+        color={
+          role === "ADMIN"
+            ? "cyan"
+            : role === "STAFF"
+            ? "teal"
+            : role === "USER"
+            ? "green"
+            : "red"
+        }
+      >
+        {UserRole[role as keyof typeof UserRole]}
+      </Badge>
+    );
   };
 
-  useEffect(() => {
-    fetchDataUsers();
-  });
+  const handleUpdateRole = (user: UserResponse) => {
+    modals.open({
+      title: "Update Role",
+      children: (
+        <UpdateRoleModal user={user} users={users} setUsers={setUsers} />
+      ),
+    });
+  };
+
+  const handleBannedUser = (
+    banned: boolean,
+    id: number,
+    role: string,
+    username: string
+  ) => {
+    modals.open({
+      title: "Ban User",
+      children: (
+        <>
+          <BannedModal
+            userRole={role}
+            userId={id}
+            username={username}
+            banned={banned}
+          />
+        </>
+      ),
+    });
+  };
 
   return (
     <>
@@ -48,7 +87,7 @@ function AppTable() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {users.data.map((item, index) => (
+          {users.map((item, index) => (
             <Table.Tr
               key={item.id}
               bg={item.banned === false ? "" : "var(--mantine-color-red-light)"}
@@ -66,24 +105,10 @@ function AppTable() {
                   </Text>
                 </Group>
               </Table.Td>
+
               <Table.Td>{item.email}</Table.Td>
 
-              <Table.Td>
-                <Badge
-                  variant="light"
-                  color={
-                    item.role === "ADMIN"
-                      ? "cyan"
-                      : item.role === "STAFF"
-                      ? "teal"
-                      : item.role === "USER"
-                      ? "green"
-                      : "red"
-                  }
-                >
-                  {item.role}
-                </Badge>
-              </Table.Td>
+              <Table.Td>{getRoleBadge(item.role)}</Table.Td>
 
               <Table.Td>
                 <Menu shadow="md" width={170}>
@@ -98,16 +123,7 @@ function AppTable() {
 
                   <Menu.Dropdown>
                     <Menu.Item
-                      onClick={() => {
-                        modals.open({
-                          title: "Update Role",
-                          children: (
-                            <>
-                              <UpdateRoleModal userId={item.id} />
-                            </>
-                          ),
-                        });
-                      }}
+                      onClick={() => handleUpdateRole(item)}
                       leftSection={
                         <FaRegUser
                           style={{ width: rem(14), height: rem(14) }}
@@ -116,31 +132,16 @@ function AppTable() {
                     >
                       Update Role
                     </Menu.Item>
-                    <Menu.Item
-                      leftSection={
-                        <RiLockPasswordLine
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
-                    >
-                      Change Password
-                    </Menu.Item>
+
                     {item.banned === false ? (
                       <Menu.Item
                         onClick={() => {
-                          modals.open({
-                            title: "Ban User",
-                            children: (
-                              <>
-                                <BannedModal
-                                  userRole={item.role}
-                                  userId={item.id}
-                                  username={item.username}
-                                  banned={item.banned}
-                                />
-                              </>
-                            ),
-                          });
+                          handleBannedUser(
+                            item.banned,
+                            item.id,
+                            item.role,
+                            item.username
+                          );
                         }}
                         color="red"
                         leftSection={
@@ -152,19 +153,12 @@ function AppTable() {
                     ) : (
                       <Menu.Item
                         onClick={() => {
-                          modals.open({
-                            title: "Remove Banned",
-                            children: (
-                              <>
-                                <BannedModal
-                                  userRole={item.role}
-                                  userId={item.id}
-                                  username={item.username}
-                                  banned={item.banned}
-                                />
-                              </>
-                            ),
-                          });
+                          handleBannedUser(
+                            item.banned,
+                            item.id,
+                            item.role,
+                            item.username
+                          );
                         }}
                         color="green"
                         leftSection={
@@ -181,9 +175,8 @@ function AppTable() {
           ))}
         </Table.Tbody>
       </Table>
-      <Pagination total={10} />
     </>
   );
 }
 
-export default AppTable;
+export default UserTable;

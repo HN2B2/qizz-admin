@@ -1,9 +1,4 @@
-export enum UserRole {
-  GUEST = "GUEST",
-  USER = "USER",
-  STAFF = "STAFF",
-  ADMIN = "ADMIN",
-}
+import { UserRole } from "./UserRole";
 
 export default interface PutBannedUserRequest {
   role: UserRole;

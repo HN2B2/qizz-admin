@@ -1,17 +1,12 @@
-export enum UserRole {
-    GUEST = "GUEST",
-    USER = "USER",
-    STAFF = "STAFF",
-    ADMIN = "ADMIN",
-}
+import { UserRole } from "../users/UserRole";
 
 export default interface UserResponse {
-    id: number
-    username: string
-    email: string
-    role: UserRole
-    displayName: string
-    createdAt: string
-    modifiedAt: string
-    banned: boolean
+  id: number;
+  username: string;
+  email: string;
+  role: UserRole;
+  displayName: string;
+  createdAt: string;
+  modifiedAt: string;
+  banned: boolean;
 }
