@@ -17,7 +17,6 @@ const Logo = () => {
         colorScheme === "dark"
             ? "/logo/logo-3-white.png"
             : "/logo/logo-3-color.png"
-    console.log(colorScheme)
 
     return (
         <Link href="/">
