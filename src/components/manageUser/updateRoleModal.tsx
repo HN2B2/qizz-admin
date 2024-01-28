@@ -1,6 +1,6 @@
 import PutRoleUserRequest from "@/types/users/PutRoleUserRequest";
 import { getServerErrorNoti, instance } from "@/utils";
-import { Button, Group, Select } from "@mantine/core";
+import { Button, Group, Select, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
@@ -22,7 +22,7 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
   const form = useForm({
     initialValues: {
       role: "",
-      banned: false,
+      banned: user.banned,
     },
     validate: {
       role: (value) => (value.length === 0 ? "Role is required" : null),
@@ -42,6 +42,20 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
     });
     setUsers(users);
   };
+
+  const openConfirmUpdate = () =>
+    modals.openConfirmModal({
+      title: `Please confirm update role as ${form.values.role}`,
+      children: (
+        <Text size="sm">
+          This action is so important that you are required to confirm it with a
+          modal. Please click one of these buttons to proceed.
+        </Text>
+      ),
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => handleUpdateRole(user.id),
+    });
 
   const handleUpdateRole = async (id: number) => {
     form.validate();
@@ -71,24 +85,48 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
   }, []);
 
   return (
-    <form onSubmit={formOnSubmit}>
-      <Select
-        label="Role"
-        placeholder="Pick a role"
-        data={data}
-        {...form.getInputProps("role")}
-      />
+    <>
+      {user.role === "ADMIN" && (
+        <Text c={"red"} size={"sm"} mb="md">
+          The account's role is admin, you cannot update role.
+        </Text>
+      )}
+      <form onSubmit={formOnSubmit}>
+        <Select
+          label="Role"
+          placeholder="Pick a role"
+          data={data}
+          disabled={user.role === "ADMIN" ? true : false}
+          {...form.getInputProps("role")}
+        />
 
-      <Group mt="md">
-        <Button
-          type="submit"
-          fullWidth
-          onClick={() => handleUpdateRole(user.id)}
-        >
-          Save
-        </Button>
-      </Group>
-    </form>
+        <Group mt="md">
+          {form.values.role === user.role ? (
+            <Button
+              type="submit"
+              fullWidth
+              disabled
+              onClick={() => {
+                openConfirmUpdate();
+              }}
+            >
+              Save
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              fullWidth
+              disabled={user.role === "ADMIN" ? true : false}
+              onClick={() => {
+                openConfirmUpdate();
+              }}
+            >
+              Save
+            </Button>
+          )}
+        </Group>
+      </form>
+    </>
   );
 }
 export default UpdateRoleModal;

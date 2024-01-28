@@ -122,6 +122,7 @@ function UserTable({ users, setUsers }: UserTableProps) {
                   </Menu.Target>
 
                   <Menu.Dropdown>
+                    {/*start: Update Role */}
                     <Menu.Item
                       onClick={() => handleUpdateRole(item)}
                       leftSection={
@@ -132,7 +133,9 @@ function UserTable({ users, setUsers }: UserTableProps) {
                     >
                       Update Role
                     </Menu.Item>
+                    {/* end: Update Role  */}
 
+                    {/* start: Banned User */}
                     {item.banned === false ? (
                       <Menu.Item
                         onClick={() => {
@@ -168,6 +171,7 @@ function UserTable({ users, setUsers }: UserTableProps) {
                         Remove Banned
                       </Menu.Item>
                     )}
+                    {/* end: Banned User */}
                   </Menu.Dropdown>
                 </Menu>
               </Table.Td>

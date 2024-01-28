@@ -68,17 +68,24 @@ function BannedModal(props: IProps) {
 
   return (
     <>
-      <Text size="sm">
-        This action is so important that you are required to confirm it with a
-        modal.{banned === false ? " Ban" : " Remove Ban"} for username:
-        <span style={{ fontWeight: "bold" }}> {username}. </span>
-        Please click one of these buttons to proceed.
-      </Text>
+      {userRole === "ADMIN" ? (
+        <Text c={"red"} size="sm">
+          You cannot ban an admin.
+        </Text>
+      ) : (
+        <Text size="sm">
+          This action is so important that you are required to confirm it with a
+          modal.{banned === false ? " Ban" : " Remove Ban"} for username:
+          <span style={{ fontWeight: "bold" }}> {username}. </span>
+          Please click one of these buttons to proceed.
+        </Text>
+      )}
       <Group justify="flex-end" mt="md">
         <Button variant="default" onClick={() => modals.closeAll()}>
           Close
         </Button>
         <Button
+          disabled={userRole === "ADMIN" ? true : false}
           onClick={() => {
             banned === false
               ? handleBanUSer(userId)
