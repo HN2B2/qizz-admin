@@ -4,13 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-const UserSearch = ({
-  total,
-  pageSize,
-}: {
-  total: number;
-  pageSize: number;
-}) => {
+const UserSearchName = () => {
   const router = useRouter();
   const { keyword } = router.query;
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -58,4 +52,4 @@ const UserSearch = ({
     </Group>
   );
 };
-export default UserSearch;
+export default UserSearchName;

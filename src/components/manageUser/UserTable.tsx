@@ -83,6 +83,7 @@ function UserTable({ users, setUsers }: UserTableProps) {
             <Table.Th>User</Table.Th>
             <Table.Th>Email</Table.Th>
             <Table.Th>Role</Table.Th>
+            <Table.Th>Banned</Table.Th>
             <Table.Th>Action</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -106,15 +107,10 @@ function UserTable({ users, setUsers }: UserTableProps) {
                 </Group>
               </Table.Td>
 
-              <Table.Td
-                onClick={() => {
-                  console.log("click dc hang");
-                }}
-              >
-                {item.email}
-              </Table.Td>
+              <Table.Td>{item.email}</Table.Td>
 
               <Table.Td>{getRoleBadge(item.role)}</Table.Td>
+              <Table.Td>{item.banned === false ? "False" : "True"}</Table.Td>
 
               <Table.Td>
                 <Menu shadow="md" width={170}>
@@ -174,7 +170,7 @@ function UserTable({ users, setUsers }: UserTableProps) {
                           <FaBan style={{ width: rem(14), height: rem(14) }} />
                         }
                       >
-                        Remove Banned
+                        UnBan
                       </Menu.Item>
                     )}
                     {/* end: Banned User */}

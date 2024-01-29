@@ -13,7 +13,7 @@ import UserTable from "../../components/manageUser/UserTable";
 import {
   CreateModal,
   UserPagination,
-  UserSearch,
+  UserSearchName,
 } from "@/components/manageUser";
 import { useRouter } from "next/router";
 import { CiSearch } from "react-icons/ci";
@@ -35,28 +35,6 @@ const UserPage = ({ userData }: UserPageProps) => {
   const { page, keyword } = router.query;
   const [users, setUsers] = useState(userData.data);
   const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
-
-  const [searchKeyword, setSearchKeyword] = useState("");
-  useEffect(() => {
-    if (router.isReady) {
-      setSearchKeyword(keyword as string);
-    }
-  }, [router.isReady, keyword]);
-
-  const handdleSearch = () => {
-    if (!searchKeyword || searchKeyword.length === 0) {
-      router.push({
-        query: {},
-      });
-      return;
-    }
-    router.push({
-      query: {
-        keyword: searchKeyword,
-      },
-    });
-  };
-
   const totalPage = Math.ceil(userData.total / PAGE_SIZE);
 
   const fetchUsers = async () => {
@@ -92,28 +70,7 @@ const UserPage = ({ userData }: UserPageProps) => {
             style={{ marginBottom: "20px", marginTop: "10px" }}
           >
             <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
-              <Group gap="xs">
-                <TextInput
-                  placeholder="Search"
-                  size="xs"
-                  w={600}
-                  leftSection={
-                    <IconSearch
-                      style={{ width: rem(12), height: rem(12) }}
-                      stroke={1.5}
-                    />
-                  }
-                  rightSectionWidth={70}
-                  styles={{ section: { pointerEvents: "none" } }}
-                  mb="md"
-                  value={searchKeyword}
-                  onChange={(e) => setSearchKeyword(e.target.value)}
-                />
-                <ActionIcon mb={"md"} onClick={handdleSearch}>
-                  <CiSearch />
-                </ActionIcon>
-              </Group>
-              {/* <UserSearch /> */}
+              <UserSearchName />
 
               {/* create user */}
               <Group mb="md">

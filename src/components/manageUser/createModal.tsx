@@ -58,6 +58,9 @@ function CreateModal(props: IProps) {
 
   const handleSubmit = async () => {
     form.validate();
+    if (!form.isValid()) {
+      return;
+    }
     try {
       const { data }: { data: PostUserRequest } = await instance.post(
         "/users",
