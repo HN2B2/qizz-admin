@@ -106,7 +106,13 @@ function UserTable({ users, setUsers }: UserTableProps) {
                 </Group>
               </Table.Td>
 
-              <Table.Td>{item.email}</Table.Td>
+              <Table.Td
+                onClick={() => {
+                  console.log("click dc hang");
+                }}
+              >
+                {item.email}
+              </Table.Td>
 
               <Table.Td>{getRoleBadge(item.role)}</Table.Td>
 
