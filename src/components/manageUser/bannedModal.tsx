@@ -1,10 +1,9 @@
 import { getServerErrorNoti, instance } from "@/utils";
-import { Button, Group, Select, Text } from "@mantine/core";
+import { Button, Group, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import PutBannedUserRequest from "@/types/users/PutBannedUserRequest";
-import { isBooleanObject } from "util/types";
 interface IProps {
   username: string;
   userRole: string;

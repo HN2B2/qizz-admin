@@ -1,5 +1,3 @@
-import { Pagination } from "@mantine/core";
-import { useEffect, useState } from "react";
 import {
   ActionIcon,
   Avatar,
@@ -13,7 +11,6 @@ import {
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { IconAdjustments } from "@tabler/icons-react";
 import { FaBan, FaRegUser } from "react-icons/fa6";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { modals } from "@mantine/modals";
 import { BannedModal, UpdateRoleModal } from ".";
 import { UserRole } from "@/types/users/UserRole";

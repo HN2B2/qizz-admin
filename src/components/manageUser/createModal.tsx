@@ -8,7 +8,6 @@ import {
   PasswordInput,
   TextInput,
   Group,
-  Badge,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { getServerErrorNoti, instance } from "@/utils";

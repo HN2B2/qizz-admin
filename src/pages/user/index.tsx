@@ -1,10 +1,8 @@
-import React, { createContext, useCallback, useContext, useMemo } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
-import { ActionIcon, Box, Container, Pagination } from "@mantine/core";
+import { Container } from "@mantine/core";
 import { Button, Flex, Paper } from "@mantine/core";
-import { TextInput } from "@mantine/core";
 import { ScrollArea, Group, rem } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { instance } from "@/utils";
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
@@ -16,7 +14,6 @@ import {
   UserSearchName,
 } from "@/components/manageUser";
 import { useRouter } from "next/router";
-import { CiSearch } from "react-icons/ci";
 
 const PAGE_SIZE: number = 5;
 const PAGE: number = 1;
