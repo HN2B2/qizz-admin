@@ -11,11 +11,16 @@ import { IconMoon, IconSun } from "@tabler/icons-react"
 import classes from "./SwitchSchemeBtn.module.css"
 import Link from "next/link"
 
-const logoUrl = "/next.svg"
 const Logo = () => {
+    const colorScheme = useComputedColorScheme("light")
+    const logoUrl =
+        colorScheme === "dark"
+            ? "/logo/logo-3-white.png"
+            : "/logo/logo-3-color.png"
+
     return (
         <Link href="/">
-            <Image src={logoUrl} alt="Qizz" h={20} fit="contain" />
+            <Image src={logoUrl} alt="Qizz" h={46} fit="contain" />
         </Link>
     )
 }
