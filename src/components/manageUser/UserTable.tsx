@@ -41,6 +41,14 @@ function UserTable({ users, setUsers }: UserTableProps) {
     );
   };
 
+  const getBannedBadge = (banned: boolean) => {
+    return (
+      <Badge variant="outline" color={banned === true ? "red" : "teal"}>
+        {banned === true ? "True" : "False"}
+      </Badge>
+    );
+  };
+
   const handleUpdateRole = (user: UserResponse) => {
     modals.open({
       title: "Update Role",
@@ -77,6 +85,7 @@ function UserTable({ users, setUsers }: UserTableProps) {
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ width: rem(40) }}></Table.Th>
+            <Table.Th>ID</Table.Th>
             <Table.Th>User</Table.Th>
             <Table.Th>Email</Table.Th>
             <Table.Th>Role</Table.Th>
@@ -91,6 +100,7 @@ function UserTable({ users, setUsers }: UserTableProps) {
               bg={item.banned === false ? "" : "var(--mantine-color-red-light)"}
             >
               <Table.Td></Table.Td>
+              <Table.Td>{item.id}</Table.Td>
               <Table.Td>
                 <Group gap="sm">
                   <Avatar
@@ -107,8 +117,8 @@ function UserTable({ users, setUsers }: UserTableProps) {
               <Table.Td>{item.email}</Table.Td>
 
               <Table.Td>{getRoleBadge(item.role)}</Table.Td>
-              <Table.Td>{item.banned === false ? "False" : "True"}</Table.Td>
-
+              {/* <Table.Td>{item.banned === false ? "False" : "True"}</Table.Td> */}
+              <Table.Td>{getBannedBadge(item.banned)}</Table.Td>
               <Table.Td>
                 <Menu shadow="md" width={170}>
                   <Menu.Target>
