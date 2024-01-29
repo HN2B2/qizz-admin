@@ -13,14 +13,20 @@ import { useForm } from "@mantine/form";
 import { getServerErrorNoti, instance } from "@/utils";
 import { notifications } from "@mantine/notifications";
 import PostUserRequest from "@/types/users/PostUserRequest";
+import { UserResponse } from "@/types/user";
+import { UseListStateHandlers } from "@mantine/hooks";
+import { randomInt } from "crypto";
+import { UserRole } from "@/types/users/UserRole";
+import { useRouter } from "next/router";
 
 interface IProps {
   showModalCreate: boolean;
   setShowModalCreate: (v: boolean) => void;
+  users: UserResponse[];
+  handlers: UseListStateHandlers<UserResponse>;
 }
 function CreateModal(props: IProps) {
-  const { showModalCreate, setShowModalCreate } = props;
-
+  const { showModalCreate, setShowModalCreate, users, handlers } = props;
   const form = useForm({
     initialValues: {
       username: "",
@@ -54,14 +60,15 @@ function CreateModal(props: IProps) {
       },
     },
   });
-
+  const router = useRouter();
+  const { page } = router.query;
   const handleSubmit = async () => {
     form.validate();
     if (!form.isValid()) {
       return;
     }
     try {
-      const { data }: { data: PostUserRequest } = await instance.post(
+      const { data }: { data: UserResponse } = await instance.post(
         "/users",
         form.values
       );
@@ -71,6 +78,16 @@ function CreateModal(props: IProps) {
         color: "green",
       });
       handleCloseModal();
+      if (page === "1") {
+        handlers.prepend(data);
+        handlers.remove(5);
+      } else {
+        router.push({
+          query: {
+            page: 1,
+          },
+        });
+      }
     } catch (error) {
       notifications.show({
         title: "Error",

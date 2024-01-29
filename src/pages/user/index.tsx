@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import { useEffect, useState } from "react";
 import { Container } from "@mantine/core";
 import { Button, Flex, Paper } from "@mantine/core";
@@ -14,8 +14,9 @@ import {
   UserSearchName,
 } from "@/components/manageUser";
 import { useRouter } from "next/router";
+import { useListState } from "@mantine/hooks";
 
-const PAGE_SIZE: number = 5;
+export const PAGE_SIZE: number = 5;
 const PAGE: number = 1;
 
 const breadcrumbsItems: BreadCrumbsItem[] = [
@@ -27,10 +28,14 @@ interface UserPageProps {
   userData: GetAllUSerResponse;
 }
 
+export const UserDataContext = createContext<any>([] as any);
+
 const UserPage = ({ userData }: UserPageProps) => {
   const router = useRouter();
   const { page, keyword } = router.query;
-  const [users, setUsers] = useState(userData.data);
+  // const [users, setUsers] = useState(userData.data);
+  const [users, handlers] = useListState(userData.data);
+
   const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
   const totalPage = Math.ceil(userData.total / PAGE_SIZE);
 
@@ -48,7 +53,7 @@ const UserPage = ({ userData }: UserPageProps) => {
         ${page ? `&page=${fetchPage}` : ""}
         ${keyword ? `&keyword=${keyword}` : ""}`
       );
-      setUsers(newData.data);
+      handlers.setState(newData.data);
     } catch (error) {
       console.log(error);
     }
@@ -59,38 +64,37 @@ const UserPage = ({ userData }: UserPageProps) => {
   }, [keyword, page]);
 
   return (
-    <MainLayout title="User" breadcrumbs={breadcrumbsItems}>
-      <ScrollArea>
-        <Container size={"xl"} mt={"md"}>
-          <Paper
-            shadow="md"
-            style={{ marginBottom: "20px", marginTop: "10px" }}
-          >
-            <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
-              <UserSearchName />
+    <UserDataContext.Provider value={{ users, handlers }}>
+      <MainLayout title="User" breadcrumbs={breadcrumbsItems}>
+        <ScrollArea>
+          <Container size={"xl"} mt={"md"}>
+            <Paper
+              shadow="md"
+              style={{ marginBottom: "20px", marginTop: "10px" }}
+            >
+              <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
+                <UserSearchName />
 
-              {/* create user */}
-              <Group mb="md">
-                <Button onClick={() => setShowModalCreate(true)}>
-                  Add User
-                </Button>
-                <CreateModal
-                  showModalCreate={showModalCreate}
-                  setShowModalCreate={setShowModalCreate}
-                />
-              </Group>
-              {/* create user */}
-            </Flex>
-          </Paper>
+                <Group mb="md">
+                  <Button onClick={() => setShowModalCreate(true)}>
+                    Add User
+                  </Button>
+                </Group>
+              </Flex>
+            </Paper>
 
-          <UserTable users={users} setUsers={setUsers} />
+            <UserTable
+              showModalCreate={showModalCreate}
+              setShowModalCreate={setShowModalCreate}
+            />
 
-          <Group justify="center">
-            <UserPagination total={userData.total} pageSize={PAGE_SIZE} />
-          </Group>
-        </Container>
-      </ScrollArea>
-    </MainLayout>
+            <Group justify="center">
+              <UserPagination total={userData.total} pageSize={PAGE_SIZE} />
+            </Group>
+          </Container>
+        </ScrollArea>
+      </MainLayout>
+    </UserDataContext.Provider>
   );
 };
 

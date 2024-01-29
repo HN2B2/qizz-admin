@@ -8,11 +8,12 @@ const UserSearchName = () => {
   const router = useRouter();
   const { keyword } = router.query;
   const [searchKeyword, setSearchKeyword] = useState("");
+
   useEffect(() => {
     if (router.isReady) {
-      setSearchKeyword(keyword as string);
+      setSearchKeyword((keyword as string) || "");
     }
-  }, [router.isReady, keyword]);
+  }, [router.isReady]);
 
   const handdleSearch = () => {
     if (!searchKeyword || searchKeyword.length === 0) {
@@ -44,7 +45,7 @@ const UserSearchName = () => {
         styles={{ section: { pointerEvents: "none" } }}
         mb="md"
         value={searchKeyword}
-        onChange={(e) => setSearchKeyword(e.target.value)}
+        onChange={(e) => setSearchKeyword(e.currentTarget.value)}
       />
       <ActionIcon mb={"md"} onClick={handdleSearch}>
         <CiSearch />

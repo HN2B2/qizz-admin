@@ -6,14 +6,18 @@ import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import { UserResponse } from "@/types/user";
 import { UserRole } from "@/types/users/UserRole";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { UserDataContext } from "@/pages/user";
+import { UseListStateHandlers } from "@mantine/hooks";
 interface IProps {
-  user: UserResponse;
+  index: number;
   users: UserResponse[];
-  setUsers: (users: UserResponse[]) => void;
+  handlers: UseListStateHandlers<UserResponse>;
 }
 
-function UpdateRoleModal({ user, users, setUsers }: IProps) {
+function UpdateRoleModal({ index, users, handlers }: IProps) {
+  const user = users[index];
+
   const data = [
     { value: "ADMIN", label: "ADMIN" },
     { value: "STAFF", label: "STAFF" },
@@ -22,7 +26,7 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
   const form = useForm({
     initialValues: {
       role: "",
-      banned: user.banned,
+      banned: false,
     },
     validate: {
       role: (value) => (value.length === 0 ? "Role is required" : null),
@@ -34,15 +38,6 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
     (errors) => console.error(errors)
   );
 
-  const handleUpdateState = () => {
-    users.map((user) => {
-      if (user.id === user.id) {
-        user.role = UserRole[form.values.role as keyof typeof UserRole];
-      }
-    });
-    setUsers(users);
-  };
-
   const openConfirmUpdate = () =>
     modals.openConfirmModal({
       title: `Please confirm update role as ${form.values.role}`,
@@ -53,7 +48,7 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
         </Text>
       ),
       labels: { confirm: "Confirm", cancel: "Cancel" },
-      onCancel: () => console.log("Cancel"),
+      onCancel: () => {},
       onConfirm: () => handleUpdateRole(user.id),
     });
 
@@ -70,7 +65,10 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
         color: "green",
       });
       modals.closeAll();
-      handleUpdateState();
+      handlers.setItem(index, {
+        ...user,
+        role: UserRole[data.role as keyof typeof UserRole],
+      });
     } catch (error) {
       notifications.show({
         title: "Error",
@@ -91,12 +89,21 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
           The account's role is admin, you cannot update role.
         </Text>
       )}
+
+      {user.banned === true && (
+        <Text c={"red"} size="sm" mb="md">
+          You cannot update the role because the account is banned. If you want
+          to update role, please unban the account.
+        </Text>
+      )}
       <form onSubmit={formOnSubmit}>
         <Select
           label="Role"
           placeholder="Pick a role"
           data={data}
-          disabled={user.role === "ADMIN" ? true : false}
+          disabled={
+            user.role === "ADMIN" || user.banned === true ? true : false
+          }
           {...form.getInputProps("role")}
         />
 
@@ -116,7 +123,9 @@ function UpdateRoleModal({ user, users, setUsers }: IProps) {
             <Button
               type="submit"
               fullWidth
-              disabled={user.role === "ADMIN" ? true : false}
+              disabled={
+                user.role === "ADMIN" || user.banned === true ? true : false
+              }
               onClick={() => {
                 openConfirmUpdate();
               }}

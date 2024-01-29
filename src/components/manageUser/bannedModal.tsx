@@ -4,20 +4,20 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import PutBannedUserRequest from "@/types/users/PutBannedUserRequest";
+import { UserResponse } from "@/types/user";
+import { UseListStateHandlers } from "@mantine/hooks";
 interface IProps {
-  username: string;
-  userRole: string;
-  userId: number;
-  banned: boolean;
+  index: number;
+  users: UserResponse[];
+  handlers: UseListStateHandlers<UserResponse>;
 }
 
-function BannedModal(props: IProps) {
-  const { userRole, userId, banned, username } = props;
-
+function BannedModal({ index, users, handlers }: IProps) {
+  const user = users[index];
   const form = useForm({
     initialValues: {
-      role: userRole,
-      banned: Boolean(banned),
+      role: user.role,
+      banned: Boolean(user.banned),
     },
   });
 
@@ -34,6 +34,10 @@ function BannedModal(props: IProps) {
         color: "green",
       });
       modals.closeAll();
+      handlers.setItem(index, {
+        ...user,
+        banned: true,
+      });
     } catch (error) {
       notifications.show({
         title: "Error",
@@ -56,6 +60,10 @@ function BannedModal(props: IProps) {
         color: "green",
       });
       modals.closeAll();
+      handlers.setItem(index, {
+        ...user,
+        banned: false,
+      });
     } catch (error) {
       notifications.show({
         title: "Error",
@@ -67,15 +75,15 @@ function BannedModal(props: IProps) {
 
   return (
     <>
-      {userRole === "ADMIN" ? (
+      {user.role === "ADMIN" ? (
         <Text c={"red"} size="sm">
           You cannot ban an admin.
         </Text>
       ) : (
         <Text size="sm">
           This action is so important that you are required to confirm it with a
-          modal.{banned === false ? " Ban" : " Remove Ban"} for username:
-          <span style={{ fontWeight: "bold" }}> {username}. </span>
+          modal.{user.banned === false ? " Ban" : " Remove Ban"} for username:
+          <span style={{ fontWeight: "bold" }}> {user.username}. </span>
           Please click one of these buttons to proceed.
         </Text>
       )}
@@ -84,11 +92,11 @@ function BannedModal(props: IProps) {
           Close
         </Button>
         <Button
-          disabled={userRole === "ADMIN" ? true : false}
+          disabled={user.role === "ADMIN" ? true : false}
           onClick={() => {
-            banned === false
-              ? handleBanUSer(userId)
-              : handleRemoveBanUser(userId);
+            user.banned === false
+              ? handleBanUSer(user.id)
+              : handleRemoveBanUser(user.id);
           }}
         >
           Comfirm
