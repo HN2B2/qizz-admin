@@ -6,8 +6,7 @@ import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import { UserResponse } from "@/types/user";
 import { UserRole } from "@/types/users/UserRole";
-import { useContext, useEffect } from "react";
-import { UserDataContext } from "@/pages/user";
+import { useEffect } from "react";
 import { UseListStateHandlers } from "@mantine/hooks";
 interface IProps {
   index: number;

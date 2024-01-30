@@ -1,31 +1,26 @@
-import {
-  ActionIcon,
-  Combobox,
-  Group,
-  Input,
-  InputBase,
-  NativeSelect,
-  useCombobox,
-} from "@mantine/core";
+import { ActionIcon, Group, NativeSelect } from "@mantine/core";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IconSortDescending } from "@tabler/icons-react";
+import { IconSortAscending } from "@tabler/icons-react";
 const UserSort = () => {
-  const sortData = ["asc", "desc"];
+  const orderData = ["id", "username", "email", "role", "banned"];
   const router = useRouter();
-  const { sort } = router.query;
-  const [sortValue, setSortValue] = useState<string | null>(null);
+  const { order } = router.query;
+  const [clicked, setClicked] = useState(false);
 
+  const [oderValue, setOrderValue] = useState<string | null>("id");
   useEffect(() => {
     if (router.isReady) {
-      if (sort && sort.length > 0) {
-        setSortValue(sort as string);
+      if (order && order.length > 0) {
+        setOrderValue(order as string);
       }
     }
   }, [router.isReady]);
 
-  const handleSort = () => {
-    if (!sortValue || sortValue.length === 0) {
+  const handleOrderDesc = () => {
+    setClicked(!clicked);
+    if (!oderValue || oderValue.length === 0) {
       router.push({
         query: {},
       });
@@ -33,24 +28,47 @@ const UserSort = () => {
     }
     router.push({
       query: {
-        sort: sortValue,
+        order: oderValue,
+        sort: "desc",
+      },
+    });
+  };
+
+  const handleOrderAsc = () => {
+    setClicked(!clicked);
+    if (!oderValue || oderValue.length === 0) {
+      router.push({
+        query: {},
+      });
+      return;
+    }
+    router.push({
+      query: {
+        order: oderValue,
+        sort: "asc",
       },
     });
   };
 
   return (
-    <>
-      <Group>
-        <NativeSelect
-          value={sortValue || "asc"}
-          onChange={(event) => setSortValue(event.currentTarget.value)}
-          data={sortData}
-        />
-        <ActionIcon onClick={handleSort}>
+    <Group gap="3px">
+      <NativeSelect
+        size="xs"
+        value={oderValue || "id"}
+        onChange={(event) => setOrderValue(event.currentTarget.value)}
+        data={orderData}
+      />
+
+      {clicked ? (
+        <ActionIcon onClick={handleOrderAsc}>
+          <IconSortAscending />
+        </ActionIcon>
+      ) : (
+        <ActionIcon onClick={handleOrderDesc}>
           <IconSortDescending />
         </ActionIcon>
-      </Group>
-    </>
+      )}
+    </Group>
   );
 };
 export default UserSort;

@@ -1,8 +1,8 @@
 import React, { createContext } from "react";
-import { useEffect, useState } from "react";
-import { Container, Select } from "@mantine/core";
-import { Button, Flex, Paper } from "@mantine/core";
-import { ScrollArea, Group, rem } from "@mantine/core";
+import { useEffect } from "react";
+import { Container } from "@mantine/core";
+import { Flex, Paper } from "@mantine/core";
+import { ScrollArea, Group } from "@mantine/core";
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { instance } from "@/utils";
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
@@ -11,7 +11,6 @@ import UserTable from "../../components/manageUser/UserTable";
 
 import {
   CreateUserBtn,
-  UserOrder,
   UserPagination,
   UserSearchName,
   UserSort,
@@ -81,8 +80,7 @@ const UserPage = ({ userData }: UserPageProps) => {
               <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
                 <UserSearchName />
                 <Group mb="md">
-                  {/* <UserSort /> */}
-                  <UserOrder />
+                  <UserSort />
                   <CreateUserBtn />
                 </Group>
               </Flex>
