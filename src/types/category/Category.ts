@@ -1,7 +1,9 @@
-interface Category {
+import { SubCategory } from ".";
+
+export default interface Category {
   id: number;
+  createdAt: string;
   name: string;
   description: string;
-  createdAt: string;
-  modifiedAt: string;
+  subCategories: SubCategory[];
 }
