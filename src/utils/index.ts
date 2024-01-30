@@ -15,3 +15,12 @@ export const getServerErrorNoti = (error: any) => {
         return "Something went wrong"
     }
 }
+
+export const convertDate = (date: string) => {
+    const d = new Date(date)
+    return d.toLocaleDateString("vi-VI", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    })
+}

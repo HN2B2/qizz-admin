@@ -5,6 +5,7 @@ import Link from "next/link"
 import { IconHome, IconInfoCircle } from "@tabler/icons-react"
 import { Header, Navbar } from "./layoutComponents"
 import BreadCrumbsItem from "./layoutComponents/BreadCrumbsItem"
+import { IconCategory } from '@tabler/icons-react';
 
 const APP_NAME = "Qizz"
 
@@ -19,6 +20,11 @@ const navbarItems = [
         title: "Home",
         link: "/",
         icon: <IconHome size="1rem" stroke={1.5} />,
+    },
+    {
+        title: "Category",
+        link: "/category",
+        icon: <IconCategory size="1rem" stroke={1.5} />,
     },
     {
         title: "About",
