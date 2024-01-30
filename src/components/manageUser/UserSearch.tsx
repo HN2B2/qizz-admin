@@ -30,7 +30,7 @@ const UserSearchName = () => {
   };
 
   return (
-    <Group gap="xs">
+    <Group gap="3px" wrap="nowrap">
       <TextInput
         placeholder="Search"
         size="xs"

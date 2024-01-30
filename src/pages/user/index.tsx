@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { useEffect, useState } from "react";
-import { Container } from "@mantine/core";
+import { Container, Select } from "@mantine/core";
 import { Button, Flex, Paper } from "@mantine/core";
 import { ScrollArea, Group, rem } from "@mantine/core";
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
@@ -8,10 +8,13 @@ import { instance } from "@/utils";
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
 import { GetServerSidePropsContext } from "next";
 import UserTable from "../../components/manageUser/UserTable";
+
 import {
-  CreateModal,
+  CreateUserBtn,
+  UserOrder,
   UserPagination,
   UserSearchName,
+  UserSort,
 } from "@/components/manageUser";
 import { useRouter } from "next/router";
 import { useListState } from "@mantine/hooks";
@@ -32,11 +35,9 @@ export const UserDataContext = createContext<any>([] as any);
 
 const UserPage = ({ userData }: UserPageProps) => {
   const router = useRouter();
-  const { page, keyword } = router.query;
-  // const [users, setUsers] = useState(userData.data);
+  const { page, keyword, order, sort } = router.query;
   const [users, handlers] = useListState(userData.data);
 
-  const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
   const totalPage = Math.ceil(userData.total / PAGE_SIZE);
 
   const fetchUsers = async () => {
@@ -48,11 +49,16 @@ const UserPage = ({ userData }: UserPageProps) => {
       if (fetchPage > totalPage) {
         fetchPage = totalPage;
       }
-      const { data: newData } = await instance.get(
-        `/users?limit=${PAGE_SIZE}
-        ${page ? `&page=${fetchPage}` : ""}
-        ${keyword ? `&keyword=${keyword}` : ""}`
-      );
+      const { data: newData } = await instance.get(`/users`, {
+        params: {
+          limit: PAGE_SIZE,
+          page: fetchPage,
+          keyword: keyword,
+          order: order,
+          sort: sort,
+        },
+      });
+
       handlers.setState(newData.data);
     } catch (error) {
       console.log(error);
@@ -61,7 +67,7 @@ const UserPage = ({ userData }: UserPageProps) => {
 
   useEffect(() => {
     fetchUsers();
-  }, [keyword, page]);
+  }, [keyword, page, order, sort]);
 
   return (
     <UserDataContext.Provider value={{ users, handlers }}>
@@ -74,19 +80,15 @@ const UserPage = ({ userData }: UserPageProps) => {
             >
               <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
                 <UserSearchName />
-
-                <Group mb="md">
-                  <Button onClick={() => setShowModalCreate(true)}>
-                    Add User
-                  </Button>
+                <Group  mb="md">
+                  {/* <UserSort /> */}
+                  <UserOrder />
+                  <CreateUserBtn />
                 </Group>
               </Flex>
             </Paper>
 
-            <UserTable
-              showModalCreate={showModalCreate}
-              setShowModalCreate={setShowModalCreate}
-            />
+            <UserTable />
 
             <Group justify="center">
               <UserPagination total={userData.total} pageSize={PAGE_SIZE} />

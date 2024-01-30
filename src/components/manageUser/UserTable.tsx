@@ -12,19 +12,16 @@ import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
 import { IconAdjustments } from "@tabler/icons-react";
 import { FaBan, FaRegUser } from "react-icons/fa6";
 import { modals } from "@mantine/modals";
-import { BannedModal, CreateModal, UpdateRoleModal } from ".";
+import { BannedModal, UpdateRoleModal } from ".";
 import { UserRole } from "@/types/users/UserRole";
 import { UserResponse } from "@/types/user";
 import { useContext } from "react";
 import { PAGE_SIZE, UserDataContext } from "@/pages/user";
 import { UseListStateHandlers } from "@mantine/hooks";
 import { useRouter } from "next/router";
-interface IProps {
-  showModalCreate: boolean;
-  setShowModalCreate: (v: boolean) => void;
-}
-function UserTable(props: IProps) {
-  const { showModalCreate, setShowModalCreate } = props;
+
+interface IProps {}
+function UserTable() {
   const {
     users,
     handlers,
@@ -81,18 +78,12 @@ function UserTable(props: IProps) {
 
   const router = useRouter();
   const { page } = router.query;
-  const baseIndex = parseInt(page as string) * PAGE_SIZE - PAGE_SIZE + 1;
+  const baseIndex = parseInt(page as string) * PAGE_SIZE - PAGE_SIZE + 1 || 1;
 
   return (
     console.log("total user", users.length),
     (
       <>
-        <CreateModal
-          users={users}
-          handlers={handlers}
-          showModalCreate={showModalCreate}
-          setShowModalCreate={setShowModalCreate}
-        />
         <Table miw={800} verticalSpacing="sm">
           <Table.Thead>
             <Table.Tr>
