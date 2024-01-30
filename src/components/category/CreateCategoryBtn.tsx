@@ -30,7 +30,7 @@ const CreateCategoryModal = ({
     const { page = "1" } = router.query
     const handleCreateNewCategory = async () => {
         newCategoryForm.validate()
-        if (!newCategoryForm.isValid) {
+        if (!newCategoryForm.isValid()) {
             return
         }
         try {
@@ -78,7 +78,7 @@ const CreateCategoryModal = ({
                 {...newCategoryForm.getInputProps("description")}
             />
             <Group justify="end">
-                <Button variant="default" onClick={() => modals.closeAll}>
+                <Button variant="default" onClick={() => modals.closeAll()}>
                     Cancel
                 </Button>
                 <Button

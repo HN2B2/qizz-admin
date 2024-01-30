@@ -6,25 +6,28 @@ import { useEffect, useState } from "react"
 const SearchBar = () => {
     const router = useRouter()
     const { keyword } = router.query
-
-    const [keywordValue, setKeywordValue] = useState("")
+    const [keywordValue, setKeywordValue] = useState(keyword || "")
 
     useEffect(() => {
-        if (router.isReady) {
-            setKeywordValue(keyword as string)
+        if (router.isReady && keyword !== keywordValue) {
+            setKeywordValue(keyword ? (keyword as string) : "")
         }
-    }, [router.isReady])
+    }, [router.isReady, keyword])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        router.push({
-            pathname: "/category",
-            query: { keyword: keywordValue },
-        })
+        if (keywordValue) {
+            router.push({
+                pathname: "/category",
+                query: {
+                    keyword: keywordValue,
+                },
+            })
+        }
     }
 
     return (
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={handleSubmit}>
             <Group>
                 <TextInput
                     placeholder="Search category"
