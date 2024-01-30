@@ -87,7 +87,7 @@ function UserTable() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ width: rem(40) }}></Table.Th>
-            <Table.Th>ID</Table.Th>
+            <Table.Th>#</Table.Th>
             <Table.Th>User</Table.Th>
             <Table.Th>Email</Table.Th>
             <Table.Th>Role</Table.Th>

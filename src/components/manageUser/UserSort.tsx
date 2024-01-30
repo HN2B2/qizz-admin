@@ -6,7 +6,7 @@ import { IconSortAscending } from "@tabler/icons-react";
 const UserSort = () => {
   const orderData = ["id", "username", "email", "role", "banned"];
   const router = useRouter();
-  const { order } = router.query;
+  const { order, keyword } = router.query;
   const [clicked, setClicked] = useState(false);
 
   const [oderValue, setOrderValue] = useState<string | null>("id");
@@ -28,6 +28,7 @@ const UserSort = () => {
     }
     router.push({
       query: {
+        keyword,
         order: oderValue,
         sort: "desc",
       },
@@ -44,6 +45,7 @@ const UserSort = () => {
     }
     router.push({
       query: {
+        keyword,
         order: oderValue,
         sort: "asc",
       },
@@ -61,11 +63,11 @@ const UserSort = () => {
 
       {clicked ? (
         <ActionIcon onClick={handleOrderAsc}>
-          <IconSortAscending />
+          <IconSortAscending size={"1rem"} />
         </ActionIcon>
       ) : (
         <ActionIcon onClick={handleOrderDesc}>
-          <IconSortDescending />
+          <IconSortDescending size={"1rem"} />
         </ActionIcon>
       )}
     </Group>
