@@ -28,7 +28,7 @@ const UserOrder = () => {
     }
   }, [router.isReady]);
 
-  const handleOrder = () => {
+  const handleOrderDesc = () => {
     setClicked(!clicked);
     if (!oderValue || oderValue.length === 0) {
       router.push({
@@ -39,6 +39,23 @@ const UserOrder = () => {
     router.push({
       query: {
         order: oderValue,
+        sort: "desc",
+      },
+    });
+  };
+
+  const handleOrderAsc = () => {
+    setClicked(!clicked);
+    if (!oderValue || oderValue.length === 0) {
+      router.push({
+        query: {},
+      });
+      return;
+    }
+    router.push({
+      query: {
+        order: oderValue,
+        sort: "asc",
       },
     });
   };
@@ -53,15 +70,11 @@ const UserOrder = () => {
       />
 
       {clicked ? (
-        <ActionIcon
-          onClick={() => {
-            setClicked(!clicked);
-          }}
-        >
+        <ActionIcon onClick={handleOrderAsc}>
           <IconSortAscending />
         </ActionIcon>
       ) : (
-        <ActionIcon onClick={handleOrder}>
+        <ActionIcon onClick={handleOrderDesc}>
           <IconSortDescending />
         </ActionIcon>
       )}

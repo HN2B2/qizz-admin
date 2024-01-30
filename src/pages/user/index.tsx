@@ -75,12 +75,12 @@ const UserPage = ({ userData }: UserPageProps) => {
         <ScrollArea>
           <Container size={"xl"} mt={"md"}>
             <Paper
-              shadow="md"
+              shadow="sm"
               style={{ marginBottom: "20px", marginTop: "10px" }}
             >
               <Flex justify="space-between" gap="lg" px={"md"} mt={"md"}>
                 <UserSearchName />
-                <Group  mb="md">
+                <Group mb="md">
                   {/* <UserSort /> */}
                   <UserOrder />
                   <CreateUserBtn />
