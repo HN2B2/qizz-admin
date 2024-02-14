@@ -3,17 +3,20 @@ import { UserResponse } from "@/types/user";
 import { getServerErrorNoti, instance } from "@/utils";
 import { Button, Group, PasswordInput, TextInput, rem } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { UseListStateHandlers } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { IconPlus } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 
-const CreateUserForm = () => {
+const CreateUserForm = ({
+  handlers,
+}: {
+  handlers: UseListStateHandlers<UserResponse>;
+}) => {
   const router = useRouter();
   const { page } = router.query;
-
-  const { handlers } = useContext(UserDataContext);
 
   const form = useForm({
     initialValues: {
@@ -72,6 +75,7 @@ const CreateUserForm = () => {
         handlers.remove(5);
       } else {
         router.push({
+          pathname: "/user",
           query: {
             page: 1,
           },
@@ -119,10 +123,12 @@ const CreateUserForm = () => {
 };
 
 const CreateUserBtn = () => {
+  const { handlers }: { handlers: UseListStateHandlers<UserResponse> } =
+    useContext(UserDataContext);
   const handleCreateUser = () => {
     modals.open({
       title: "Create User",
-      children: <CreateUserForm />,
+      children: <CreateUserForm handlers={handlers} />,
     });
   };
 
