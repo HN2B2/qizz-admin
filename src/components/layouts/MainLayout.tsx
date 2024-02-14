@@ -30,7 +30,7 @@ const navbarItems = [
   {
     title: "User",
     link: "/user",
-    icon: <FaRegUser size="1rem" stroke={1.5} />,
+    icon: <FaRegUser size="0.8rem" stroke={1.5} />,
   },
   {
     title: "About",
