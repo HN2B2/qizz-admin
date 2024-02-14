@@ -66,6 +66,7 @@ const CreateUserForm = () => {
       });
       form.reset();
       modals.closeAll();
+      console.log("Check handelers", data);
       if (page === "1") {
         handlers.prepend(data);
         handlers.remove(5);
@@ -77,6 +78,7 @@ const CreateUserForm = () => {
         });
       }
     } catch (error) {
+      console.log("Check error: ", error);
       notifications.show({
         title: "Error",
         message: getServerErrorNoti(error),
@@ -134,7 +136,6 @@ const CreateUserBtn = () => {
     >
       Add User
     </Button>
-    
   );
 };
 
