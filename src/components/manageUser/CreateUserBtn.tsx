@@ -69,7 +69,6 @@ const CreateUserForm = ({
       });
       form.reset();
       modals.closeAll();
-      console.log("Check handelers", data);
       if (page === "1") {
         handlers.prepend(data);
         handlers.remove(5);
