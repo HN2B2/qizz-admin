@@ -1,4 +1,4 @@
-import PutRoleUserRequest from "@/types/users/PutRoleUserRequest";
+import UpdateRoleUserRequest from "@/types/users/UpdateRoleUserRequest";
 import { getServerErrorNoti, instance } from "@/utils";
 import { Button, Group, Select, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -54,7 +54,7 @@ function UpdateRoleModal({ index, users, handlers }: IProps) {
   const handleUpdateRole = async (id: number) => {
     form.validate();
     try {
-      const { data }: { data: PutRoleUserRequest } = await instance.put(
+      const { data }: { data: UpdateRoleUserRequest } = await instance.put(
         `/users/${id}`,
         form.values
       );

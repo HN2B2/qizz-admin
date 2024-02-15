@@ -1,6 +1,7 @@
 import { UserRole } from "./UserRole";
 
-export default interface PutRoleUserRequest {
+export default interface UpdateRoleUserRequest {
   role: UserRole;
   banned: false;
 }
+

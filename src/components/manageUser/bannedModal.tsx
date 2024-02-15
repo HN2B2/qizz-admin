@@ -3,7 +3,7 @@ import { Button, Group, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
-import PutBannedUserRequest from "@/types/users/PutBannedUserRequest";
+import UpdateBannedUserRequest from "@/types/users/UpdateBannedUserRequest";
 import { UserResponse } from "@/types/user";
 import { UseListStateHandlers } from "@mantine/hooks";
 interface IProps {
@@ -24,7 +24,7 @@ function BannedModal({ index, users, handlers }: IProps) {
   const handleBanUSer = async (id: number) => {
     form.values.banned = true;
     try {
-      const { data }: { data: PutBannedUserRequest } = await instance.put(
+      const { data }: { data: UpdateBannedUserRequest } = await instance.put(
         `/users/${id}`,
         form.values
       );
@@ -50,7 +50,7 @@ function BannedModal({ index, users, handlers }: IProps) {
   const handleRemoveBanUser = async (id: number) => {
     form.values.banned = false;
     try {
-      const { data }: { data: PutBannedUserRequest } = await instance.put(
+      const { data }: { data: UpdateBannedUserRequest } = await instance.put(
         `/users/${id}`,
         form.values
       );
