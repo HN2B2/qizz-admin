@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { useEffect } from "react";
-import { Container } from "@mantine/core";
+import { ActionIcon, Container, Input } from "@mantine/core";
 import { Flex, Paper } from "@mantine/core";
 import { ScrollArea, Group } from "@mantine/core";
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse";
@@ -17,6 +17,7 @@ import {
 } from "@/components/manageUser";
 import { useRouter } from "next/router";
 import { useListState } from "@mantine/hooks";
+import UserFilter from "@/components/manageUser/UserFilter";
 
 export const PAGE_SIZE: number = 5;
 const PAGE: number = 1;

@@ -83,7 +83,7 @@ function UserTable() {
 
   return (
     <>
-      <Table miw={800} verticalSpacing="sm">
+      <Table miw={800} verticalSpacing="sm" highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ width: rem(40) }}></Table.Th>
@@ -104,7 +104,7 @@ function UserTable() {
               <Table.Td></Table.Td>
               <Table.Td>{baseIndex + index}</Table.Td>
               <Table.Td>
-                <Group gap="sm">
+                <Group gap="sm" wrap="nowrap">
                   <Avatar
                     size={26}
                     src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
