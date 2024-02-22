@@ -3,10 +3,17 @@ import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-
+interface Query {
+  [key: string]: string | string[] | undefined;
+  keyword?: string | string[];
+  order?: string;
+  sort?: string;
+  role?: string | string[];
+  banned?: string | string[];
+}
 const UserSearchName = () => {
   const router = useRouter();
-  const { keyword } = router.query;
+  const { keyword, role, banned } = router.query;
   const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
@@ -22,10 +29,16 @@ const UserSearchName = () => {
       });
       return;
     }
+    const queryy: Query = {};
+    if (role) {
+      queryy.role = role;
+    }
+    if (banned) {
+      queryy.banned = banned;
+    }
+    queryy.keyword = searchKeyword;
     router.push({
-      query: {
-        keyword: searchKeyword,
-      },
+      query: queryy,
     });
   };
 
