@@ -8,6 +8,7 @@ import { instance } from "@/utils";
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
 import { GetServerSidePropsContext } from "next";
 import UserTable from "../../components/manageUser/UserTable";
+import { CiFilter } from "react-icons/ci";
 
 import {
   CreateUserBtn,
@@ -35,7 +36,7 @@ export const UserDataContext = createContext<any>([] as any);
 
 const UserPage = ({ userData }: UserPageProps) => {
   const router = useRouter();
-  const { page = 1, keyword, order, sort } = router.query;
+  const { page = 1, keyword, order, sort, role, banned } = router.query;
   const [users, handlers] = useListState(userData.data);
 
   const totalPage = Math.ceil(userData.total / PAGE_SIZE);
@@ -60,6 +61,8 @@ const UserPage = ({ userData }: UserPageProps) => {
           keyword: keyword,
           order: order,
           sort: sort,
+          role: role,
+          banned: banned,
         },
       });
 
@@ -72,7 +75,7 @@ const UserPage = ({ userData }: UserPageProps) => {
   useEffect(() => {
     fetchUsers();
     console.log(users);
-  }, [keyword, page, order, sort]);
+  }, [keyword, page, order, sort, role, banned]);
 
   return (
     <UserDataContext.Provider value={{ users, handlers }}>
@@ -87,6 +90,7 @@ const UserPage = ({ userData }: UserPageProps) => {
                   <CreateUserBtn />
                 </Group>
               </Flex>
+              <UserFilter total={userData.total} />
             </Paper>
             <Paper p={"md"} shadow="sm">
               <UserTable />
@@ -109,7 +113,7 @@ export const getServerSideProps = async (
 ) => {
   try {
     const { req, query } = context;
-    const { page = PAGE, keyword, order, sort } = query;
+    const { page = PAGE, keyword, order, sort, role, banned } = query;
     const res = await instance.get(`/users`, {
       params: {
         limit: PAGE_SIZE,
@@ -117,6 +121,8 @@ export const getServerSideProps = async (
         keyword,
         order,
         sort,
+        role,
+        banned,
       },
       withCredentials: true,
       headers: {
