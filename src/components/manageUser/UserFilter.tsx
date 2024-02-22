@@ -5,12 +5,8 @@ import {
   Collapse,
   Flex,
   Group,
-  Input,
   Select,
-  Text,
-  TextInput,
   Tooltip,
-  rem,
 } from "@mantine/core";
 import { UseListStateHandlers, useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/router";
@@ -18,8 +14,6 @@ import { useContext, useEffect, useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
-import { FaUser } from "react-icons/fa";
-import { MdAlternateEmail } from "react-icons/md";
 import { FaUserCog } from "react-icons/fa";
 import { FaUserLock } from "react-icons/fa";
 import { TbFilterSearch } from "react-icons/tb";
@@ -45,13 +39,10 @@ const UserFilter = ({ total }: { total: number }) => {
   const router = useRouter();
   const { keyword, role, banned, sort, order } = router.query;
   const [clicked, setClicked] = useState(false);
-  const [clearFilter, setClearFilter] = useState(false);
-  // const [filterKeyword, setFilterKeyword] = useState<string | null>("");
   const [filterRole, setFilterRole] = useState<string | null>("");
   const [filterBanned, setFilterBanned] = useState<string | null>("");
   useEffect(() => {
     if (router.isReady) {
-      // setFilterKeyword((keyword as string) || "");
       setFilterRole((role as string) || "");
       setFilterBanned((banned as string) || "");
     }
