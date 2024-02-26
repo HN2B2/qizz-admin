@@ -1,5 +1,5 @@
 import { Container, Title, Text, Button, Group } from "@mantine/core"
-import { Illustration } from "./Illustration"
+import Illustration from "./Illustration"
 import classes from "./NothingFoundBackground.module.css"
 import Head from "next/head"
 
