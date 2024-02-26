@@ -8,7 +8,7 @@ export default function Home() {
 
     return (
         <MainLayout breadcrumbs={breadcrumbsItems}>
-            <Link href="/auth/logout">Logout</Link>
+            <Link href="/auth/logout">Sign out</Link>
         </MainLayout>
     )
 }
