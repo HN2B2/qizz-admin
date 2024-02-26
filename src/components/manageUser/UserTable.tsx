@@ -4,10 +4,14 @@ import {
   Badge,
   Box,
   Center,
+  Collapse,
+  Dialog,
+  Flex,
   Group,
   Menu,
   Table,
   Text,
+  TextInput,
   rem,
 } from "@mantine/core";
 import { IconAdjustments } from "@tabler/icons-react";
@@ -18,7 +22,7 @@ import { UserRole } from "@/types/users/UserRole";
 import { UserResponse } from "@/types/user";
 import { useContext } from "react";
 import { PAGE_SIZE, UserDataContext } from "@/pages/user";
-import { UseListStateHandlers } from "@mantine/hooks";
+import { UseListStateHandlers, useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/router";
 
 interface IProps {}
@@ -80,10 +84,9 @@ function UserTable() {
   const router = useRouter();
   const { page } = router.query;
   const baseIndex = parseInt(page as string) * PAGE_SIZE - PAGE_SIZE + 1 || 1;
-
   return (
     <>
-      <Table miw={800} verticalSpacing="sm">
+      <Table miw={800} verticalSpacing="sm" highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th style={{ width: rem(40) }}></Table.Th>
@@ -104,7 +107,7 @@ function UserTable() {
               <Table.Td></Table.Td>
               <Table.Td>{baseIndex + index}</Table.Td>
               <Table.Td>
-                <Group gap="sm">
+                <Group gap="sm" wrap="nowrap">
                   <Avatar
                     size={26}
                     src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png"
