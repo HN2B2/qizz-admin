@@ -1,5 +1,3 @@
-export const runtime = "experimental-edge"
-
 import React, { createContext } from "react"
 import { useEffect } from "react"
 import { Container } from "@mantine/core"
