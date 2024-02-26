@@ -12,7 +12,6 @@ import {
     Button,
     Divider,
     Flex,
-    Text,
 } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { useDisclosure, useHotkeys, useLocalStorage } from "@mantine/hooks"
@@ -20,7 +19,6 @@ import { notifications } from "@mantine/notifications"
 import { IconBrandGoogleFilled } from "@tabler/icons-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
 
 const LoginPage = () => {
     const [_, setUser] = useLocalStorage<UserResponse>({
@@ -56,13 +54,12 @@ const LoginPage = () => {
         },
     })
 
-    const [
-        loading,
-        { toggle: toggleLoading, close: closeLoading, open: openLoading },
-    ] = useDisclosure()
+    const [loading, { close: closeLoading, open: openLoading }] =
+        useDisclosure()
 
     const router = useRouter()
-    const handleLogin = async () => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         openLoading()
 
         loginForm.validate()
@@ -89,7 +86,6 @@ const LoginPage = () => {
         }
     }
 
-    useHotkeys([["enter", handleLogin]])
     return (
         <>
             <Head>
@@ -106,36 +102,32 @@ const LoginPage = () => {
                         w={"400px"}
                     >
                         <Title mb={16} order={2}>
-                            Welcome back!
+                            Qizz Admin Panel - Login
                         </Title>
-                        <TextInput
-                            label="Email"
-                            placeholder="email@qizz.tech"
-                            required
-                            {...loginForm.getInputProps("email")}
-                        />
-                        <PasswordInput
-                            label="Password"
-                            placeholder="Your password"
-                            required
-                            mt="md"
-                            {...loginForm.getInputProps("password")}
-                        />
-                        <Group justify="end" mt="lg">
-                            {/* <Checkbox label="Remember me" /> */}
-                            <Anchor component="button" size="sm">
-                                Forgot password?
-                            </Anchor>
-                        </Group>
-                        <Button
-                            fullWidth
-                            mt="xl"
-                            mb={12}
-                            loading={loading}
-                            onClick={handleLogin}
-                        >
-                            Sign in
-                        </Button>
+                        <form onSubmit={handleLogin}>
+                            <TextInput
+                                label="Email"
+                                placeholder="email@qizz.tech"
+                                required
+                                {...loginForm.getInputProps("email")}
+                            />
+                            <PasswordInput
+                                label="Password"
+                                placeholder="Your password"
+                                required
+                                mt="md"
+                                {...loginForm.getInputProps("password")}
+                            />
+                            <Group justify="end" mt="lg">
+                                {/* <Checkbox label="Remember me" /> */}
+                                <Anchor component="button" size="sm">
+                                    Forgot password?
+                                </Anchor>
+                            </Group>
+                            <Button fullWidth mt="xl" mb={12} loading={loading}>
+                                Sign in
+                            </Button>
+                        </form>
                         <Divider label="Or continue with" />
                         <Button
                             fullWidth
