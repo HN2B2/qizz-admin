@@ -1,6 +1,8 @@
+export const runtime = "edge"
+
 import React, { createContext } from "react"
 import { useEffect } from "react"
-import { ActionIcon, Container, Input } from "@mantine/core"
+import { Container } from "@mantine/core"
 import { Flex, Paper } from "@mantine/core"
 import { ScrollArea, Group } from "@mantine/core"
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse"
@@ -8,7 +10,6 @@ import { instance } from "@/utils"
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts"
 import { GetServerSidePropsContext } from "next"
 import UserTable from "../../components/manageUser/UserTable"
-import { CiFilter } from "react-icons/ci"
 
 import {
     CreateUserBtn,
