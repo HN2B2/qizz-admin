@@ -1,4 +1,4 @@
-export const runtime = "edge"
+export const runtime = "experimental-edge"
 
 import React, { createContext } from "react"
 import { useEffect } from "react"
