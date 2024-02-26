@@ -9,9 +9,9 @@ const Filter = () => {
         <NavLink
           href="#required-for-focus"
           label="Number of Questions"
-          childrenOffset={10}
+          // childrenOffset={10}
         >
-          <Checkbox label="0 - 10" labelPosition="right" />
+          <Checkbox label="0 - 10" />
           <Checkbox label="11 - 20" />
           <Checkbox label="21 - 30" />
           <Checkbox label="31 - 40" />
