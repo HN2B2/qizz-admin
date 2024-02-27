@@ -88,7 +88,8 @@ const CategoryFilter = () => {
               label={category.name}
               checked={checkedCategories[category.name] ?? false}
               onChange={() => handleCategoryChange(category.name)}
-              labelPosition="left"
+              labelPosition="right"
+              mb={5}
             />
             {category.subCategories.length > 0 && (
               <div style={{ paddingLeft: 20 }}>
@@ -97,7 +98,8 @@ const CategoryFilter = () => {
                     key={subIndex}
                     label={subCategory.name}
                     checked={checkedSubCategories[subCategory.name] ?? false}
-                    labelPosition="left"
+                    labelPosition="right"
+                    mb={5}
                     onChange={() =>
                       handleSubCategoryChange(category.name, subCategory.name)
                     }

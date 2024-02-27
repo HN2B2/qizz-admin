@@ -47,7 +47,7 @@ function Details() {
   const renderAnswer = (answer: Answer | string, type: "multiple" | "fill") => {
     if (type === "multiple" && typeof answer !== "string") {
       return (
-        <Text key={answer.id} weight={answer.isCorrect ? "bold" : "normal"}>
+        <Text key={answer.id} fw={answer.isCorrect ? "bold" : "normal"}>
           {answer.text}
         </Text>
       );
