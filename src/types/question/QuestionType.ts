@@ -1,0 +1,4 @@
+export enum QuestionType {
+  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
+  FILL_IN_THE_BLANK = "FILL_IN_THE_BLANK",
+}
