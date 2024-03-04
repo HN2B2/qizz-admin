@@ -188,7 +188,7 @@ const CategoryTable = () => {
   }: {
     categoryList: Category[];
   } = useContext(CategoryDataContext);
-
+  console.log(categoryList);
   return (
     <Table verticalSpacing={"md"} highlightOnHover>
       <Table.Thead>

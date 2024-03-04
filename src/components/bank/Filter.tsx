@@ -10,23 +10,13 @@ const Filter = () => {
           href="#required-for-focus"
           label="Number of Questions"
           // childrenOffset={10}
+          defaultOpened
         >
-          <Checkbox label="0 - 10" mb={5} />
+          <Checkbox label="00 - 10" mb={5} />
           <Checkbox label="11 - 20" mb={5} />
           <Checkbox label="21 - 30" mb={5} />
           <Checkbox label="31 - 40" mb={5} />
           <Checkbox label="41+" />
-        </NavLink>
-        <Divider mt="xs" mb="sm" color={"gray"} />
-
-        {/* Types of Question Section */}
-        <NavLink
-          href="#required-for-focus"
-          label="Types of Questions"
-          childrenOffset={10}
-        >
-          <Checkbox label="Multiple Choice" labelPosition="right" mb={5} />
-          <Checkbox label="Fill in the blank" />
         </NavLink>
         <Divider mt="xs" mb="sm" color={"gray"} />
       </ScrollArea>

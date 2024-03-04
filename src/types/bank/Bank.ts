@@ -1,6 +1,7 @@
 export default interface Bank {
-  id: number;
+  quizBankId: number;
   name: string;
+  imgURL: string;
   description: string;
   totalQuestions: number;
 }
