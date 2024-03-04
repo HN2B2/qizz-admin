@@ -2,7 +2,7 @@ import { AppShell, Breadcrumbs } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Head from "next/head";
 import Link from "next/link";
-import { IconHome, IconInfoCircle } from "@tabler/icons-react";
+import { IconHome, IconInfoCircle, IconPuzzle } from "@tabler/icons-react";
 import { Header, Navbar } from "./layoutComponents";
 import BreadCrumbsItem from "./layoutComponents/BreadCrumbsItem";
 import { IconCategory } from "@tabler/icons-react";
@@ -36,6 +36,11 @@ const navbarItems = [
     title: "About",
     link: "/about",
     icon: <IconInfoCircle size="1rem" stroke={1.5} />,
+  },
+  {
+    title: "Bank",
+    link: "/bank",
+    icon: <IconPuzzle size="1rem" stroke={1.5} />,
   },
 ];
 
