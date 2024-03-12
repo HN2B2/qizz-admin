@@ -4,7 +4,7 @@ export default interface NotificationResponse {
   id: number;
   title: string;
   content: string;
-  target: NotificationTargetType;
+  targetType: NotificationTargetType;
   createdAt: string;
   modifiedAt: string;
   createdBy: number;

@@ -59,7 +59,7 @@ const NotificationPage = ({ notificationData }: NotificationPageProps) => {
         fetchNotifications()
     }, [keyword, page, order, sort, target])
   return (
-    <NotificationDataContext.Provider value={[notifications, handlers]}>
+    <NotificationDataContext.Provider value={{notifications, handlers}}>
         <MainLayout title="Notification" breadcrumbs={breadcrumbsItems}>
        <ScrollArea>
                     <Container size={"xl"} mt={"md"}>
