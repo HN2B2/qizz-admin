@@ -7,6 +7,9 @@ import { Header, Navbar } from "./layoutComponents";
 import BreadCrumbsItem from "./layoutComponents/BreadCrumbsItem";
 import { IconCategory } from "@tabler/icons-react";
 import { FaRegUser } from "react-icons/fa";
+import { IoMdNotificationsOutline } from "react-icons/io";
+
+
 
 const APP_NAME = "Qizz";
 
@@ -41,6 +44,11 @@ const navbarItems = [
     title: "Bank",
     link: "/bank",
     icon: <IconPuzzle size="1rem" stroke={1.5} />,
+  },
+  {
+    title: "Notification",
+    link: "/notification",
+    icon: <IoMdNotificationsOutline size="1rem" stroke={1} />,
   },
 ];
 
