@@ -1,27 +1,79 @@
+import { NotificationDataContext } from "@/pages/notification";
+import { NotificationResponse } from "@/types/notification";
+import { getServerErrorNoti, instance } from "@/utils";
 import { Button, Group, Select, TextInput, Textarea, rem } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { UseListStateHandlers } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import { IconPlus } from "@tabler/icons-react";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 
-const CreateUserForm = () => {
+const CreateUserForm = ({
+  handlers,
+}: {
+  handlers: UseListStateHandlers<NotificationResponse>;
+}) => {
   const dataTarget = [
-    { value: "ALL_PEOPLE", label: "ALL PEOPLE" },
+    { value: "ALL_PEOPLE", label: "ALL_PEOPLE" },
     { value: "ONLY_STAFF", label: "ONLY_STAFF" },
     { value: "ONLY_USER", label: "ONLY_USER" },
   ];
+  const router = useRouter();
+  const { page } = router.query;
   const form = useForm({
     initialValues: {
       title: "",
       content: "",
-      target: "",
+      targetType: "",
     },
     validate: {
       title: (value) =>
         value.length < 6 ? "Title should be at least 6 characters long" : null,
-      content: (value) => (value.length == 0 ? "Content is required" : null),
-      target: (value) => (value.length == 0 ? "Target is required" : null),
+      content: (value) => (value.length === 0 ? "Content is required" : null),
+      targetType: (value) => (value.length === 0 ? "Target is required" : null),
     },
   });
+
+  const handleSubmit = async () => {
+    form.validate();
+    if (!form.isValid()) {
+      return;
+    }
+    try {
+      const { data }: { data: NotificationResponse } = await instance.post(
+        "/notifications",
+        form.values
+      );
+      notifications.show({
+        title: "Success",
+        message: "Create user successfully",
+        color: "green",
+      });
+      form.reset();
+      modals.closeAll();
+      if (page === "1") {
+        handlers.prepend(data);
+        handlers.remove(5);
+      } else {
+        router.push({
+          pathname: "/notification",
+          query: {
+            page: 1,
+          },
+        });
+      }
+    } catch (error) {
+      console.log("Check error: ", error);
+      notifications.show({
+        title: "Error",
+        message: getServerErrorNoti(error),
+        color: "red",
+      });
+    }
+  };
+
   return (
     <>
       <TextInput
@@ -46,22 +98,24 @@ const CreateUserForm = () => {
         placeholder="Pick a target type"
         required
         data={dataTarget}
-        {...form.getInputProps("target")}
+        {...form.getInputProps("targetType")}
       />
       <Group mt={"md"} justify="end">
         <Button onClick={modals.closeAll} variant="default">
           Cancel
         </Button>
-        <Button>Create</Button>
+        <Button onClick={handleSubmit}>Create</Button>
       </Group>
     </>
   );
 };
 const CreateNotificationBtn = () => {
+  const { handlers }: { handlers: UseListStateHandlers<NotificationResponse> } =
+    useContext(NotificationDataContext);
   const handleCreateNotification = () => {
     modals.open({
       title: "Create Notification",
-      children: <CreateUserForm />,
+      children: <CreateUserForm handlers={handlers} />,
     });
   };
 
