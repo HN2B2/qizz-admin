@@ -43,12 +43,16 @@ const NotificationTable = () => {
     });
   };
 
-  const handleUpdateNotification = () => {
+  const handleUpdateNotification = (index: number) => {
     modals.open({
       title: "Edit Notification",
       children: (
         <>
-          <UpdateNotificationModal />
+          <UpdateNotificationModal
+            index={index}
+            notifications={notifications}
+            handlers={handlers}
+          />
         </>
       ),
     });
@@ -105,7 +109,7 @@ const NotificationTable = () => {
                       View Detail
                     </Menu.Item>
                     <Menu.Item
-                      onClick={() => handleUpdateNotification()}
+                      onClick={() => handleUpdateNotification(index)}
                       leftSection={
                         <FaEdit style={{ width: rem(14), height: rem(14) }} />
                       }
