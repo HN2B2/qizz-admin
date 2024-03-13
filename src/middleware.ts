@@ -4,7 +4,14 @@ import { UserResponse } from "./types/user"
 import { UserRole } from "./types/users/UserRole"
 
 export const config = {
-    matcher: ["/", "/auth/:path*", "/404", "/user/:path*", "/category/:path*"],
+    matcher: [
+        "/",
+        "/auth/:path*",
+        "/404",
+        "/user/:path*",
+        "/category/:path*",
+        "/notification/:path*",
+    ],
 }
 
 export const publicRoutes: String[] = ["/404"]
@@ -20,6 +27,10 @@ export const protectedRoutes = [
     },
     {
         path: "/category",
+        roles: [UserRole.ADMIN, UserRole.STAFF],
+    },
+    {
+        path: "/notification",
         roles: [UserRole.ADMIN, UserRole.STAFF],
     },
 ]
