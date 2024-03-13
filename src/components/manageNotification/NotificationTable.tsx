@@ -1,4 +1,13 @@
-import { ActionIcon, Group, Menu, Table, rem } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Center,
+  Group,
+  Menu,
+  Table,
+  Text,
+  rem,
+} from "@mantine/core";
 import { FaEdit } from "react-icons/fa";
 import { IconAdjustments } from "@tabler/icons-react";
 import { GrView } from "react-icons/gr";
@@ -19,12 +28,16 @@ const NotificationTable = () => {
     notifications: NotificationResponse[];
     handlers: UseListStateHandlers<NotificationResponse>;
   } = useContext(NotificationDataContext);
-  const handleViewDetail = () => {
+  const handleViewDetail = (index: number) => {
     modals.open({
       title: "Notification Detail",
       children: (
         <>
-          <NotificationDetailModal />
+          <NotificationDetailModal
+            index={index}
+            notifications={notifications}
+            handlers={handlers}
+          />
         </>
       ),
     });
@@ -56,7 +69,6 @@ const NotificationTable = () => {
             <Table.Th>Create At</Table.Th>
             <Table.Th>Modify At</Table.Th>
             <Table.Th>Target Type</Table.Th>
-            <Table.Th>Checked</Table.Th>
             <Table.Th>Action</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -71,7 +83,6 @@ const NotificationTable = () => {
 
               <Table.Td>{convertDate(item.modifiedAt)}</Table.Td>
               <Table.Td>{item.targetType}</Table.Td>
-              <Table.Td>5</Table.Td>
 
               <Table.Td>
                 <Menu shadow="md" width={170}>
@@ -86,7 +97,7 @@ const NotificationTable = () => {
 
                   <Menu.Dropdown>
                     <Menu.Item
-                      onClick={() => handleViewDetail()}
+                      onClick={() => handleViewDetail(index)}
                       leftSection={
                         <GrView style={{ width: rem(14), height: rem(14) }} />
                       }
@@ -108,6 +119,15 @@ const NotificationTable = () => {
           ))}
         </Table.Tbody>
       </Table>
+      {notifications.length === 0 && (
+        <Center maw={1100} h={100}>
+          <Box>
+            <Text c={"red"} size="lg">
+              No Data Found
+            </Text>
+          </Box>
+        </Center>
+      )}
     </>
   );
 };

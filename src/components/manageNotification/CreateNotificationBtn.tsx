@@ -5,9 +5,9 @@ import { IconPlus } from "@tabler/icons-react";
 
 const CreateUserForm = () => {
   const dataTarget = [
-    { value: "ALL PEOPLE", label: "ALL PEOPLE" },
-    { value: "STAFF", label: "STAFF" },
-    { value: "USER", label: "USER" },
+    { value: "ALL_PEOPLE", label: "ALL PEOPLE" },
+    { value: "ONLY_STAFF", label: "ONLY_STAFF" },
+    { value: "ONLY_USER", label: "ONLY_USER" },
   ];
   const form = useForm({
     initialValues: {
