@@ -9,8 +9,11 @@ import {
   Button,
   Group,
   Stack,
+  Center,
+  ActionIcon,
+  Avatar,
 } from "@mantine/core";
-import { IconMenu2, IconTrash } from "@tabler/icons-react";
+import { IconTrash, IconX, IconMenu2 } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { instance } from "@/utils"; // Ensure this import path is correct
 import { BankDataContext } from "@/pages/bank";
@@ -70,74 +73,95 @@ const BankTable = () => {
 
   return (
     <>
-      <Stack>
-        <Title size="md">Results ({total})</Title>
-        <Grid w={"100%"}>
-          <Grid.Col span={5}>
-            <ScrollArea w={"100%"} type="scroll">
-              {bankList.map((bank) => (
-                <Card
-                  key={bank.quizBankId || bank.name} // Using a unique property from bank
-                  shadow="sm"
-                  component="a"
-                  target="_blank"
-                  m="5px"
-                  onMouseEnter={() => {
-                    handleOnMouseEnter(bank.quizBankId);
-                  }}
-                  // onMouseLeave={() => {}}
-                >
-                  <Grid>
-                    <Grid.Col span={4}>
-                      <Card.Section p={"sm"}>
-                        <Image
-                          src={bank.imgURL || defaultImageUrl}
-                          width={90}
-                          height={90}
-                          alt={`Bank ${bank.name}`}
-                          radius={"sm"}
-                        />
-                      </Card.Section>
-                    </Grid.Col>
+      <Title size="md">Results ({total})</Title>
+      <Grid w={"100%"} justify="space-between">
+        <Grid.Col span={5} w={"100%"}>
+          {/* <ScrollArea w={"100%"} type="scroll">
+              
+            </ScrollArea> */}
+          {bankList.map((bank) => (
+            <Card
+              key={bank.quizBankId || bank.name} // Using a unique property from bank
+              shadow="sm"
+              component="a"
+              target="_blank"
+              m="5px"
+              onMouseEnter={() => {
+                handleOnMouseEnter(bank.quizBankId);
+              }}
+              // w={"100%"}
+              onMouseLeave={() => {
+                setBankId(0);
+              }}
+            >
+              <Card.Section p={"sm"}>
+                <Grid>
+                  <Grid.Col span={3}>
+                    <Center>
+                      <Image
+                        src={bank.featuresImage || defaultImageUrl}
+                        // w="auto"
+                        w="100%"
+                        fit="contain"
+                        alt={`Bank ${bank.name}`}
+                        radius={"sm"}
+                      />
+                    </Center>
+                  </Grid.Col>
 
-                    <Grid.Col span={8}>
-                      <Card.Section>
-                        <Text size="md" w={200} lineClamp={1}>
-                          {bank.name}
-                        </Text>
-                        <Text mt="xs" color="dimmed" size="sm" lineClamp={2}>
-                          {bank.description}
-                        </Text>
-                        <Text mt="xs" size="sm">
-                          <IconMenu2 size="1rem" stroke={1.5} /> Number of
-                          Questions: {bank.totalQuestions}
-                        </Text>
-                      </Card.Section>
-                      <Card.Section>
-                        <Group>
-                          <Button
-                            variant="light"
-                            onClick={() =>
-                              showConfirmDeleteBank(bank.quizBankId)
-                            }
-                          >
-                            <IconTrash />
-                          </Button>
-                        </Group>
-                      </Card.Section>
-                    </Grid.Col>
-                  </Grid>
-                </Card>
-              ))}
-            </ScrollArea>
-          </Grid.Col>
-          <Grid.Col span={7}>
-            <Details bankId={bankId} />
-          </Grid.Col>
-        </Grid>
-      </Stack>
+                  <Grid.Col span={9} p={"sm"}>
+                    <Group justify="space-between">
+                      <Title order={4} lineClamp={1}>
+                        {bank.name}
+                      </Title>
+                      <ActionIcon
+                        bg={"red"}
+                        color={"white"}
+                        size={"sm"}
+                        onClick={() => showConfirmDeleteBank(bank.quizBankId)}
+                      >
+                        <IconX></IconX>
+                      </ActionIcon>
+                    </Group>
 
-      <BankPagination total={Math.ceil(total / 2)} />
+                    <Text mt="xs" c="dimmed" size="sm" lineClamp={2}>
+                      {bank.description}
+                    </Text>
+                    <Group justify="space-between">
+                      <Group>
+                        <IconMenu2 size="1rem" stroke={1.5} />
+                        <Text>
+                          {bank.totalQuestions ? bank.totalQuestions : 0}{" "}
+                          Questions
+                        </Text>
+                      </Group>
+                      <Group>
+                        <Text>
+                          {bank.subCategories?.length ? "Subcategories: " : ""}
+                          {bank.subCategories
+                            ? bank.subCategories.map((sc) => sc.name).join(", ")
+                            : ""}
+                        </Text>
+                      </Group>
+                    </Group>
+                    <Group>
+                      <Avatar alt="it's me" />
+                      <Text>{bank.createdBy.displayName}</Text>
+                    </Group>
+                  </Grid.Col>
+                </Grid>
+              </Card.Section>
+            </Card>
+          ))}
+        </Grid.Col>
+        <Grid.Col span={7} w={"100%"}>
+          <Details bankId={bankId} />
+        </Grid.Col>
+      </Grid>
+
+      <Center w={"100%"}>
+        <BankPagination total={Math.ceil(total / 2)} />
+      </Center>
     </>
   );
 };

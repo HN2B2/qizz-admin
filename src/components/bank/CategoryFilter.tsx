@@ -32,14 +32,26 @@ interface CheckedState {
   [key: string]: boolean;
 }
 
+interface Type {
+  label: string;
+  checked: boolean;
+  key: number;
+}
+
 const CategoryFilter = () => {
   const [checkedCategories, setCheckedCategories] = useState<CheckedState>({});
   const [checkedSubCategories, setCheckedSubCategories] =
     useState<CheckedState>({});
   const [categories, handlerCategories] = useListState<Category>([]);
   const [list, listHandler] = useListState<number>([]);
+  const [checkedCat, setCheckedCat] = useListState<number>([]);
+  const [checkedSub, setCheckedSub] = useListState<number>([]);
+  const [values, handlers] = useListState<Type>();
+
+  const allChecked = values.every((value) => value.checked);
+  const indeterminate = values.some((value) => value.checked) && !allChecked;
   const router = useRouter();
-  const { keyword, order, sort, page, subCategoryId } = router.query;
+  const { keyword, order, sort, page, subCategoryIds } = router.query;
 
   useEffect(() => {
     // const fetchCategories = async () => {
@@ -70,57 +82,110 @@ const CategoryFilter = () => {
     fetchCategories();
   }, []);
 
-  const handleCategoryChange = (categoryName: string) => {
-    const newCheckedCategories: CheckedState = {
-      ...checkedCategories,
-      [categoryName]: !checkedCategories[categoryName],
-    };
-    setCheckedCategories(newCheckedCategories);
+  // const handleCategoryChange = (categoryName: string) => {
+  //   const newCheckedCategories: CheckedState = {
+  //     ...checkedCategories,
+  //     [categoryName]: !checkedCategories[categoryName],
+  //   };
+  //   setCheckedCategories(newCheckedCategories);
 
-    // Automatically select/deselect all subcategories
-    const category = categories.find(
-      (category) => category.name === categoryName
-    );
-    if (category) {
-      const newCheckedSubCategories: CheckedState = { ...checkedSubCategories };
-      category.subCategories.forEach((subCategory) => {
-        newCheckedSubCategories[subCategory.name] =
-          newCheckedCategories[categoryName];
-      });
-      setCheckedSubCategories(newCheckedSubCategories);
+  //   // Automatically select/deselect all subcategories
+  //   const category = categories.find(
+  //     (category) => category.name === categoryName
+  //   );
+  //   if (category) {
+  //     const newCheckedSubCategories: CheckedState = { ...checkedSubCategories };
+  //     category.subCategories.forEach((subCategory) => {
+  //       newCheckedSubCategories[subCategory.name] =
+  //         newCheckedCategories[categoryName];
+  //     });
+  //     setCheckedSubCategories(newCheckedSubCategories);
+  //   }
+  // };
+
+  // const handleSubCategoryChange = (
+  //   categoryName: string,
+  //   subCategoryName: string,
+  //   id: number,
+  //   checked: boolean
+  // ) => {
+  //   const newCheckedSubCategories: CheckedState = {
+  //     ...checkedSubCategories,
+  //     [subCategoryName]: !checkedSubCategories[subCategoryName],
+  //   };
+  //   setCheckedSubCategories(newCheckedSubCategories);
+
+  //   // Check if all subcategories are selected, if so, select the category as well
+  //   const category = categories.find(
+  //     (category) => category.name === categoryName
+  //   );
+  //   if (category) {
+  //     const allSelected = category.subCategories.every(
+  //       (subCategory) => newCheckedSubCategories[subCategory.name]
+  //     );
+  //     setCheckedCategories({
+  //       ...checkedCategories,
+  //       [categoryName]: allSelected,
+  //     });
+  //   }
+
+  //   if (checked) {
+  //     listHandler.append(id);
+  //   } else {
+  //     listHandler.remove(list.indexOf(id));
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   router.push({
+  //     pathname: "/bank",
+  //     query: {
+  //       limit: PAGE_SIZE,
+  //       page,
+  //       keyword,
+  //       order,
+  //       sort,
+  //       subCategoryIds: list.join(","),
+  //     },
+  //   });
+  // }, [list]);
+
+  const handleCat = (value: number) => {
+    if (checkedCat.includes(value)) {
+      setCheckedCat.remove(checkedCat.indexOf(value));
+      // categories
+      //   .find((category) => category.id === value)
+      //   ?.subCategories.forEach((subCategory) => {
+      //     if (checkedSub.includes(subCategory.id)) {
+      //       setCheckedSub.remove(checkedSub.indexOf(subCategory.id));
+      //     }
+      //   });
+
+      let newS = checkedSub.filter(
+        (id) =>
+          !categories
+            .find((c) => c.id === value)
+            ?.subCategories.map((c) => c.id)
+            .includes(id)
+      );
+      setCheckedSub.setState(newS);
+    } else {
+      setCheckedCat.append(value);
+      categories
+        .find((category) => category.id === value)
+        ?.subCategories.forEach((subCategory) => {
+          if (!checkedSub.includes(subCategory.id)) {
+            setCheckedSub.append(subCategory.id);
+          }
+        });
     }
   };
 
-  const handleSubCategoryChange = (
-    categoryName: string,
-    subCategoryName: string,
-    id: number,
-    checked: boolean
-  ) => {
-    const newCheckedSubCategories: CheckedState = {
-      ...checkedSubCategories,
-      [subCategoryName]: !checkedSubCategories[subCategoryName],
-    };
-    setCheckedSubCategories(newCheckedSubCategories);
-
-    // Check if all subcategories are selected, if so, select the category as well
-    const category = categories.find(
-      (category) => category.name === categoryName
-    );
-    if (category) {
-      const allSelected = category.subCategories.every(
-        (subCategory) => newCheckedSubCategories[subCategory.name]
-      );
-      setCheckedCategories({
-        ...checkedCategories,
-        [categoryName]: allSelected,
-      });
-    }
-
-    if (checked) {
-      listHandler.append(id);
+  const handleSub = (value: number) => {
+    if (checkedSub.includes(value)) {
+      setCheckedSub.remove(checkedSub.indexOf(value));
     } else {
-      listHandler.remove(list.indexOf(id));
+      setCheckedSub.append(value);
     }
   };
 
@@ -133,18 +198,18 @@ const CategoryFilter = () => {
         keyword,
         order,
         sort,
-        subCategoryId: list.join(","),
+        subCategoryIds: checkedSub.join(","),
       },
     });
-  }, [list]);
+  }, [checkedSub]);
 
   return (
     <>
       <Title size="md">Category</Title>
-      <ScrollArea style={{ height: 200 }}>
+      <ScrollArea style={{ height: 200 }} w="100%">
         {categories.map((category, index) => (
           <React.Fragment key={index}>
-            <Checkbox
+            {/* <Checkbox
               label={category.name}
               checked={checkedCategories[category.name] ?? false}
               onChange={() => handleCategoryChange(category.name)}
@@ -171,6 +236,28 @@ const CategoryFilter = () => {
                   />
                 ))}
               </div>
+            )} */}
+            <Checkbox
+              label={category.name}
+              checked={checkedCat.includes(category.id) ?? false}
+              onChange={() => handleCat(category.id)}
+              labelPosition="right"
+              mb={5}
+            />
+            {category.subCategories.length > 0 && (
+              <>
+                {category.subCategories.map((subCategory, subIndex) => (
+                  <Checkbox
+                    key={subIndex}
+                    label={subCategory.name}
+                    checked={checkedSub.includes(subCategory.id) ?? false}
+                    labelPosition="right"
+                    mb={5}
+                    ml="xs"
+                    onChange={() => handleSub(subCategory.id)}
+                  />
+                ))}
+              </>
             )}
             <Divider mt="xs" mb="sm" color={"gray"} />
           </React.Fragment>

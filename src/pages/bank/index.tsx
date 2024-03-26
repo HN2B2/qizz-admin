@@ -53,9 +53,18 @@ export const BankDataContext = createContext<Context>({
 const BankPage = ({ bankData }: BankPageProps) => {
   const [bankList, handlers] = useListState(bankData.data);
   const [total, setTotal] = useState(bankData.total);
+  console.log(total);
 
   const router = useRouter();
-  const { page = "1", keyword, order, sort, subCategoryId } = router.query;
+  const {
+    page = "1",
+    keyword,
+    order,
+    sort,
+    subCategoryIds,
+    mi,
+    ma,
+  } = router.query;
 
   const handleFetchBankData = async () => {
     try {
@@ -66,7 +75,9 @@ const BankPage = ({ bankData }: BankPageProps) => {
           keyword,
           order,
           sort,
-          subCategoryId,
+          subCategoryIds,
+          mi,
+          ma,
         },
       });
       const bankData = res.data;
@@ -80,7 +91,7 @@ const BankPage = ({ bankData }: BankPageProps) => {
 
   useEffect(() => {
     handleFetchBankData();
-  }, [page, keyword, order, sort, subCategoryId]);
+  }, [page, keyword, order, sort, subCategoryIds, mi, ma]);
 
   const handleReset = () => {
     router.push({
@@ -145,7 +156,7 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   try {
-    const { page = "1", keyword, order, sort, subCategoryId } = context.query;
+    const { page = "1", keyword, order, sort, subCategoryIds } = context.query;
     const res = await instance.get(`/manageBanks`, {
       params: {
         limit: PAGE_SIZE,
@@ -153,7 +164,7 @@ export const getServerSideProps = async (
         keyword,
         order,
         sort,
-        subCategoryId,
+        subCategoryIds,
       },
       headers: {
         Cookie: context.req.headers.cookie || "",

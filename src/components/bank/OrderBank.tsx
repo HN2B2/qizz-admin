@@ -11,7 +11,7 @@ const orderData = [
 
 const OrderBank = () => {
   const router = useRouter();
-  const { keyword, order, sort, page, subCategoryId } = router.query;
+  const { keyword, order, sort, page, subCategoryIds } = router.query;
   const [orderValue, setOrderValue] = useState<string | null>("quizBankId");
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const OrderBank = () => {
         keyword,
         order: value,
         sort,
-        subCategoryId,
+        subCategoryIds,
       },
     });
   };
