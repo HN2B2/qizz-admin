@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 const SortBank = () => {
   const [isDesc, setIsDesc] = useState(true);
   const router = useRouter();
-  const { keyword, order, sort, page, subCategoryId } = router.query;
+  const { keyword, order, sort, page, subCategoryIds } = router.query;
 
   useEffect(() => {
     if (router.isReady) {
@@ -25,7 +25,7 @@ const SortBank = () => {
         keyword,
         order,
         sort: isDesc ? "desc" : "asc",
-        subCategoryId,
+        subCategoryIds,
       },
     });
   };

@@ -81,34 +81,18 @@ function Details({ bankId }: { bankId: number }) {
     <>
       {/* <Title size="md">Quiz Questions</Title> */}
       <ScrollArea w={"100%"}>
-        {/* {mockQuestions.map((question) => (
-          <Card key={question.id} shadow="sm" p="md" m="sm">
-            <Text>{question.question}</Text>
-            <Text>Points: {question.points}</Text>
-            <Text>Time: {question.time} seconds</Text>
-            <Box mt="md">
-              {question.type === "multiple" && question.answers ? (
-                question.answers.map((answer) =>
-                  renderAnswer(answer, question.type)
-                )
-              ) : (
-                <Group mt="md">
-                  <Text>Correct Answer:</Text>
-                  {question.answer &&
-                    renderAnswer(question.answer, question.type)}
-                </Group>
-              )}
-            </Box>
-          </Card>
-        ))} */}
-        {questions.map((question, index) => (
-          <ViewQuestionPaper
-            key={question.questionId}
-            index={index}
-            question={question}
-            show={true}
-          />
-        ))}
+        {bankId == 0 ? (
+          <></>
+        ) : (
+          questions.map((question, index) => (
+            <ViewQuestionPaper
+              key={question.questionId}
+              index={index}
+              question={question}
+              show={true}
+            />
+          ))
+        )}
       </ScrollArea>
     </>
   );
