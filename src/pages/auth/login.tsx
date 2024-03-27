@@ -14,10 +14,11 @@ import {
     Flex,
 } from "@mantine/core"
 import { useForm } from "@mantine/form"
-import { useDisclosure, useHotkeys, useLocalStorage } from "@mantine/hooks"
+import { useDisclosure, useLocalStorage } from "@mantine/hooks"
 import { notifications } from "@mantine/notifications"
 import { IconBrandGoogleFilled } from "@tabler/icons-react"
 import Head from "next/head"
+import Link from "next/link"
 import { useRouter } from "next/router"
 
 const LoginPage = () => {
@@ -58,6 +59,7 @@ const LoginPage = () => {
         useDisclosure()
 
     const router = useRouter()
+    const { r } = router.query
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         openLoading()
@@ -74,7 +76,11 @@ const LoginPage = () => {
                 loginForm.values as LoginRequest
             )
             setUser(data.user)
-            router.push("/")
+            if (r) {
+                router.push(r as string)
+            } else {
+                router.push("/")
+            }
         } catch (error) {
             notifications.show({
                 title: "Error",
@@ -102,7 +108,7 @@ const LoginPage = () => {
                         w={"400px"}
                     >
                         <Title mb={16} order={2}>
-                            Qizz Admin Panel - Login
+                            <Link href="/">Qizz - Login</Link>
                         </Title>
                         <form onSubmit={handleLogin}>
                             <TextInput
@@ -120,11 +126,17 @@ const LoginPage = () => {
                             />
                             <Group justify="end" mt="lg">
                                 {/* <Checkbox label="Remember me" /> */}
-                                <Anchor component="button" size="sm">
+                                <Anchor href="/auth/forgot-password" size="sm">
                                     Forgot password?
                                 </Anchor>
                             </Group>
-                            <Button fullWidth mt="xl" mb={12} loading={loading}>
+                            <Button
+                                fullWidth
+                                mt="xl"
+                                mb={12}
+                                loading={loading}
+                                type="submit"
+                            >
                                 Sign in
                             </Button>
                         </form>

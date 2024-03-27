@@ -14,8 +14,17 @@ export const config = {
     ],
 }
 
-export const publicRoutes: String[] = ["/404"]
-export const authRoutes = ["/auth/login", "/auth/register"]
+export const publicRoutes: String[] = [
+    "/404",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+]
+export const authRoutes = [
+    "/auth/login",
+    "/auth/register",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+]
 export const protectedRoutes = [
     {
         path: "/",
