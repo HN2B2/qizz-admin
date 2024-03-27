@@ -71,10 +71,11 @@ const LoginPage = () => {
         }
 
         try {
-            const { data }: { data: AuthResponse } = await instance.post(
-                "/auth/login",
-                loginForm.values as LoginRequest
-            )
+            const data: AuthResponse = await instance
+                .post("auth/login", {
+                    json: loginForm.values as LoginRequest,
+                })
+                .json()
             setUser(data.user)
             if (r) {
                 router.push(r as string)

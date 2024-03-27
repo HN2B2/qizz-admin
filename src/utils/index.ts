@@ -1,16 +1,42 @@
-import axios from "axios"
+import ky from "ky"
+import { Exception } from "@/types/exception"
 
-export const instance = axios.create({
-    baseURL: process.env.API_URL || "http://localhost:6868/v1",
-    withCredentials: true,
+export const instance = ky.create({
+    prefixUrl: process.env.API_URL || "http://localhost:6868/v1",
+    credentials: "include",
+    hooks: {
+        beforeError: [
+            async (error) => {
+                const { response } = error
+
+                if (response) {
+                    const data: Exception = await response.json()
+                    error.name = `(${data.status}) ${data.error}`
+                    error.message = data.message
+                }
+
+                return error
+            },
+        ],
+    },
 })
 
+export const getErrorStatusCode = (error: any) => {
+    if (error) {
+        return parseInt(error.name.split(" ")[0].replace("(", ""))
+    } else {
+        return 200
+    }
+}
+
+// export const localInstance = ky.create({
+//     prefixUrl: appUrl,
+//     credentials: "include",
+// })
+
 export const getServerErrorNoti = (error: any) => {
-    if (axios.isAxiosError(error) && error.response && error.response.data) {
-        const { data } = error.response
-        if (data.message) {
-            return data.message
-        }
+    if (error) {
+        return error.message
     } else {
         return "Something went wrong"
     }

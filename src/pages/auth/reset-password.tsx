@@ -1,3 +1,5 @@
+export const runtime = "experimental-edge"
+
 import { AuthResponse } from "@/types/auth"
 import { UserResponse } from "@/types/user"
 import { getServerErrorNoti, instance } from "@/utils"
@@ -80,13 +82,14 @@ const ResetPasswordPage = () => {
         }
 
         try {
-            const { data }: { data: AuthResponse } = await instance.post(
-                "/auth/reset-password",
-                {
-                    password: resetPasswordForm.values.password,
-                    token: token as string,
-                }
-            )
+            const data: AuthResponse = await instance
+                .post("auth/reset-password", {
+                    json: {
+                        password: resetPasswordForm.values.password,
+                        token: token as string,
+                    },
+                })
+                .json()
             setUser(data.user)
             router.push("/")
         } catch (error) {
@@ -163,8 +166,10 @@ export const getServerSideProps = async (
         }
     } else {
         try {
-            await instance.post("/auth/check-reset-token", {
-                token: token as string,
+            await instance.post("auth/check-reset-token", {
+                json: {
+                    token: token as string,
+                },
             })
             return {
                 props: {},
