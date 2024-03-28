@@ -44,17 +44,16 @@ interface Context {
   bankList: Bank[];
   handlers: UseListStateHandlers<Bank>;
   total: number;
-  setTotal: React.Dispatch<React.SetStateAction<number>>;
 }
 export const BankDataContext = createContext<Context>({
   bankList: [],
   handlers: {} as UseListStateHandlers<Bank>,
   total: 0,
-  setTotal: () => {},
 });
 const BankPage = ({ bankData }: BankPageProps) => {
   const [bankList, handlers] = useListState(bankData.data);
   const [total, setTotal] = useState(bankData.total);
+  console.log(total);
 
   const router = useRouter();
   const {
@@ -92,7 +91,7 @@ const BankPage = ({ bankData }: BankPageProps) => {
 
   useEffect(() => {
     handleFetchBankData();
-  }, [page, keyword, order, sort, subCategoryIds, mi, ma, total]);
+  }, [page, keyword, order, sort, subCategoryIds, mi, ma]);
 
   const handleReset = () => {
     router.push({
@@ -101,7 +100,7 @@ const BankPage = ({ bankData }: BankPageProps) => {
   };
 
   return (
-    <BankDataContext.Provider value={{ bankList, handlers, total, setTotal }}>
+    <BankDataContext.Provider value={{ bankList, handlers, total }}>
       <MainLayout title="Bank" breadcrumbs={breadcrumbsItems}>
         <Paper p={"md"} my={"md"} shadow="sm">
           <Group justify="space-between">
