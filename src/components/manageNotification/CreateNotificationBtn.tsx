@@ -42,10 +42,15 @@ const CreateUserForm = ({
       return;
     }
     try {
-      const { data }: { data: NotificationResponse } = await instance.post(
-        "/notifications",
-        form.values
-      );
+      const data: NotificationResponse = await instance
+        .post("notifications", {
+          json: {
+            title: form.values.title,
+            content: form.values.content,
+            targetType: form.values.targetType,
+          },
+        })
+        .json();
       notifications.show({
         title: "Success",
         message: "Create user successfully",
