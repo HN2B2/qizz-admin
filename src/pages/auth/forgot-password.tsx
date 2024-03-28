@@ -125,7 +125,7 @@ const ForgotPasswordPage = () => {
                                 </form>
                                 <Divider label="Or" />
                                 <Button
-                                    component="a"
+                                    component={Link}
                                     href="/auth/login"
                                     fullWidth
                                     my="md"

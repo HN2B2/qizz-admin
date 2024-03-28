@@ -2,6 +2,7 @@ import { Container, Title, Text, Button, Group } from "@mantine/core"
 import Illustration from "./Illustration"
 import classes from "./NothingFoundBackground.module.css"
 import Head from "next/head"
+import Link from "next/link"
 
 export default function NothingFoundBackground() {
     return (
@@ -28,7 +29,11 @@ export default function NothingFoundBackground() {
                             contact support.
                         </Text>
                         <Group justify="center">
-                            <Button size="md" component="a" href="/auth/logout">
+                            <Button
+                                size="md"
+                                component={Link}
+                                href="/auth/logout"
+                            >
                                 Try login to another account
                             </Button>
                         </Group>
