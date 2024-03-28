@@ -48,7 +48,7 @@ const DrawerContent = ({
   const router = useRouter();
   const handleDeleteCategory = async () => {
     try {
-      await instance.delete(`/categories/${category.id}`);
+      await instance.delete(`categories/${category.id}`);
       router.reload();
       notifications.show({
         color: "teal",
@@ -78,10 +78,11 @@ const DrawerContent = ({
       return;
     }
     try {
-      const { data }: { data: Category } = await instance.put(
-        `/categories/${category.id}`,
-        { ...category, ...updateCategoryForm.values }
-      );
+      const data: Category = await instance
+        .put(`categories/${category.id}`, {
+          json: { ...category, ...updateCategoryForm.values },
+        })
+        .json();
       notifications.show({
         color: "teal",
         title: "Success",

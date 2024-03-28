@@ -33,10 +33,14 @@ const CreateCategoryModal = ({
       return;
     }
     try {
-      const { data }: { data: Category } = await instance.post(
-        "/categories",
-        newCategoryForm.values
-      );
+      const data: Category = await instance
+        .post("categories", {
+          json: {
+            name: newCategoryForm.values.name,
+            description: newCategoryForm.values.description,
+          },
+        })
+        .json();
       notifications.show({
         color: "teal",
         title: "Success",

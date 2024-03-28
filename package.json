@@ -39,7 +39,10 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.12.0",
+    "react-stomp": "^5.1.0",
     "recharts": "^2.10.4",
+    "sockjs": "^0.3.24",
+    "sockjs-client": "^1.6.1",
     "swr": "^2.2.4"
   },
   "devDependencies": {

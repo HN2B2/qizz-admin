@@ -31,10 +31,14 @@ const UpdateNotificationModal = ({
   const handleUpdateNotification = async (id: number) => {
     form.validate();
     try {
-      const { data }: { data: UpdateNotificationRequest } = await instance.put(
-        `/notifications/${id}`,
-        form.values
-      );
+      const data: UpdateNotificationRequest = await instance
+        .put(`notifications/${id}`, {
+          json: {
+            title: form.values.title,
+            content: form.values.content,
+          },
+        })
+        .json();
       Notifications.show({
         title: "Success",
         message: "Update user successfully",
