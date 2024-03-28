@@ -58,10 +58,15 @@ const CreateUserForm = ({
       return;
     }
     try {
-      const { data }: { data: UserResponse } = await instance.post(
-        "/users",
-        form.values
-      );
+      const data: UserResponse = await instance
+        .post("users", {
+          json: {
+            username: form.values.username,
+            email: form.values.email,
+            password: form.values.password,
+          },
+        })
+        .json();
       notifications.show({
         title: "Success",
         message: "Create user successfully",

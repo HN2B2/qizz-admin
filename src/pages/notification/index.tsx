@@ -1,3 +1,5 @@
+export const runtime = "experimental-edge";
+
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
 import {
   CreateNotificationBtn,
@@ -5,8 +7,10 @@ import {
   NotificationSearch,
   NotificationTable,
 } from "@/components/manageNotification";
+import { Exception } from "@/types/exception";
+import { NotificationResponse } from "@/types/notification";
 import GetAllNotificationsResponse from "@/types/notification/GetAllNotificationsResponse";
-import { instance } from "@/utils";
+import { instance, removeEmpty } from "@/utils";
 import { Container, Flex, Group, Paper, ScrollArea } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { GetServerSidePropsContext } from "next";
@@ -43,18 +47,20 @@ const NotificationPage = ({ notificationData }: NotificationPageProps) => {
         fetchPage = 1;
       }
 
-      const { data: newData } = await instance.get(`/notifications`, {
-        params: {
-          limit: PAGE_SIZE,
-          page: fetchPage,
-          keyword: keyword,
-          order: order,
-          sort: sort,
-          target: target,
-        },
-      });
+      const dataNoti: GetAllNotificationsResponse = await instance
+        .get(`notifications`, {
+          searchParams: removeEmpty({
+            limit: PAGE_SIZE.toString(),
+            page: fetchPage.toString(),
+            keyword: keyword as string,
+            order: order as string,
+            sort: sort as string,
+            target: target as string,
+          }),
+        })
+        .json();
 
-      handlers.setState(newData.data);
+      handlers.setState(dataNoti.data);
     } catch (error) {
       console.log(error);
     }
@@ -101,28 +107,33 @@ export const getServerSideProps = async (
   try {
     const { req, query } = context;
     const { page = PAGE, keyword, order, sort, target } = query;
-    const res = await instance.get(`/notifications`, {
-      params: {
-        limit: PAGE_SIZE,
-        page,
-        keyword,
-        order,
-        sort,
-        target,
-      },
-      withCredentials: true,
-      headers: {
-        Cookie: req.headers.cookie || "",
-      },
-    });
-    const notificationData = res.data;
+
+    const res: GetAllNotificationsResponse = await instance
+      .get(`notifications`, {
+        searchParams: removeEmpty({
+          limit: PAGE_SIZE.toString(),
+          page: page.toString(),
+          keyword: keyword as string,
+          order: order as string,
+          sort: sort as string,
+          target: target as string,
+        }),
+        headers: {
+          Cookie: req.headers.cookie || "",
+        },
+      })
+      .json();
     return {
       props: {
-        notificationData,
+        notificationData: res,
       },
     };
   } catch (error) {
-    console.log(error);
+    const { response }: any = error;
+    if (response) {
+      const data: Exception = await response.json();
+      console.log(data.message);
+    }
     return {
       notFound: true,
     };
