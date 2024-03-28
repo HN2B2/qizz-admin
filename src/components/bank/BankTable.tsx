@@ -22,6 +22,7 @@ import { Bank } from "@/types/bank";
 import { useModals } from "@mantine/modals";
 import BankPagination from "./BankPagination";
 import { Details } from ".";
+import { log } from "console";
 
 const BankTable = () => {
   const { bankList, handlers, total } = useContext(BankDataContext); // Now destructuring setBankList as well
@@ -30,7 +31,8 @@ const BankTable = () => {
 
   const handleDeleteBank = async (bankId: number) => {
     try {
-      await instance.delete(`/manageBanks/${bankId}`);
+      await instance.delete(`manageBanks/${bankId}`);
+      console.log(bankId);
       handlers.setState((currentList: any[]) =>
         currentList.filter((bank) => bank.id !== bankId)
       );

@@ -9,8 +9,6 @@ import { IconCategory } from "@tabler/icons-react";
 import { FaRegUser } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 
-
-
 const APP_NAME = "Qizz";
 
 interface UserLayoutProps {
@@ -34,11 +32,6 @@ const navbarItems = [
     title: "User",
     link: "/user",
     icon: <FaRegUser size="0.8rem" stroke={1.5} />,
-  },
-  {
-    title: "About",
-    link: "/about",
-    icon: <IconInfoCircle size="1rem" stroke={1.5} />,
   },
   {
     title: "Bank",
