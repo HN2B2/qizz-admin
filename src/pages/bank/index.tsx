@@ -14,7 +14,7 @@ import {
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { UseListStateHandlers, useListState } from "@mantine/hooks";
-import { instance } from "@/utils";
+import { instance, removeEmpty } from "@/utils";
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
 import { SearchBar } from "@/components/bank";
 import BankTable from "@/components/bank/BankTable";
@@ -68,19 +68,21 @@ const BankPage = ({ bankData }: BankPageProps) => {
 
   const handleFetchBankData = async () => {
     try {
-      const res = await instance.get(`/manageBanks`, {
-        params: {
-          limit: PAGE_SIZE,
-          page,
-          keyword,
-          order,
-          sort,
-          subCategoryIds,
-          mi,
-          ma,
-        },
-      });
-      const bankData = res.data;
+      const res: BankResponse = await instance
+        .get(`manageBanks`, {
+          searchParams: removeEmpty({
+            limit: PAGE_SIZE.toString(),
+            page: page.toString(),
+            keyword: keyword as string,
+            order: order as string,
+            sort: sort as string,
+            subCategoryIds: subCategoryIds as string,
+            mi: mi as string,
+            ma: ma as string,
+          }),
+        })
+        .json();
+      const bankData = res;
       handlers.setState(bankData.data);
       setTotal(bankData.total);
     } catch (error) {
@@ -157,19 +159,21 @@ export const getServerSideProps = async (
 ) => {
   try {
     const { page = "1", keyword, order, sort, subCategoryIds } = context.query;
-    const res = await instance.get(`/manageBanks`, {
-      params: {
-        limit: PAGE_SIZE,
-        page,
-        keyword,
-        order,
-        sort,
-        subCategoryIds,
-      },
-      headers: {
-        Cookie: context.req.headers.cookie || "",
-      },
-    });
+    const res: BankResponse = await instance
+      .get(`manageBanks`, {
+        searchParams: removeEmpty({
+          limit: PAGE_SIZE.toString(),
+          page: page as string,
+          keyword: keyword as string,
+          order: order as string,
+          sort: sort as string,
+          subCategoryIds: subCategoryIds as string,
+        }),
+        headers: {
+          Cookie: context.req.headers.cookie || "",
+        },
+      })
+      .json();
     const bankData = res.data;
     return {
       props: {
