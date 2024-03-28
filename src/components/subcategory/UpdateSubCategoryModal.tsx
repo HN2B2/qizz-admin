@@ -14,6 +14,7 @@ const UpdateSubCategoryModal = ({
 }: {
   subCategory: SubCategory;
   handlers: UseListStateHandlers<SubCategory>;
+  
   index: number;
   categoryId: number;
 }) => {

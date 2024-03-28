@@ -25,6 +25,7 @@ const breadcrumbsItems: BreadCrumbsItem[] = [
   { title: "Home", link: "/" },
   { title: "Notification", link: "/notification" },
 ];
+
 const PAGE: number = 1;
 export const PAGE_SIZE: number = 5;
 const NotificationPage = ({ notificationData }: NotificationPageProps) => {
