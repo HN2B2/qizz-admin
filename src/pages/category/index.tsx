@@ -1,139 +1,143 @@
-export const runtime = "experimental-edge";
+export const runtime = "experimental-edge"
 import {
-  CategoryPagination,
-  CategoryTable,
-  CreateCategoryBtn,
-  OrderCategory,
-  SearchBar,
-} from "@/components/category";
-import SortCategory from "@/components/category/SortCategory";
-import { BreadCrumbsItem, MainLayout } from "@/components/layouts";
-import { Category } from "@/types/category";
-import { instance, removeEmpty } from "@/utils";
-import { ActionIcon, Divider, Group, Paper } from "@mantine/core";
-import { useListState } from "@mantine/hooks";
-import { IconX } from "@tabler/icons-react";
-import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
-import { createContext, useEffect, useState } from "react";
+    CategoryPagination,
+    CategoryTable,
+    CreateCategoryBtn,
+    OrderCategory,
+    SearchBar,
+} from "@/components/category"
+import SortCategory from "@/components/category/SortCategory"
+import { BreadCrumbsItem, MainLayout } from "@/components/layouts"
+import { Category } from "@/types/category"
+import { instance, removeEmpty } from "@/utils"
+import { ActionIcon, Divider, Group, Paper } from "@mantine/core"
+import { useListState } from "@mantine/hooks"
+import { IconX } from "@tabler/icons-react"
+import { GetServerSidePropsContext } from "next"
+import { useRouter } from "next/router"
+import { createContext, useEffect, useState } from "react"
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 10
 
 const breadcrumbsItems: BreadCrumbsItem[] = [
-  { title: "Home", link: "/" },
-  { title: "Category", link: "/category" },
-];
+    { title: "Home", link: "/" },
+    { title: "Category", link: "/category" },
+]
 
 interface CategoryResponse {
-  data: Category[];
-  total: number;
+    data: Category[]
+    total: number
 }
 
 interface CategoryPageProps {
-  categoryData: CategoryResponse;
+    categoryData: CategoryResponse
 }
 
-export const CategoryDataContext = createContext<any>({} as any);
+export const CategoryDataContext = createContext<any>({} as any)
 
 const CategoryPage = ({ categoryData }: CategoryPageProps) => {
-  const [categoryList, handlers] = useListState(categoryData.data);
-  const [total, setTotal] = useState(categoryData.total);
+    const [categoryList, handlers] = useListState(categoryData.data)
+    const [total, setTotal] = useState(categoryData.total)
 
-  const router = useRouter();
-  const { page = "1", keyword, order, sort } = router.query;
+    const router = useRouter()
+    const { page = "1", keyword, order, sort } = router.query
 
-  const handleFetchCategoryData = async () => {
-    try {
-      const res: CategoryResponse = await instance
-        .get(`categories`, {
-          searchParams: removeEmpty({
-            limit: PAGE_SIZE.toString(),
-            page: page.toString(),
-            keyword: keyword as string,
-            order: order as string,
-            sort: sort as string,
-          }),
-        })
-        .json();
-      handlers.setState(categoryData.data);
-      setTotal(categoryData.total);
-    } catch (error) {
-      console.log(error);
+    const handleFetchCategoryData = async () => {
+        try {
+            const res: CategoryResponse = await instance
+                .get(`categories`, {
+                    searchParams: removeEmpty({
+                        limit: PAGE_SIZE.toString(),
+                        page: page.toString(),
+                        keyword: keyword as string,
+                        order: order as string,
+                        sort: sort as string,
+                    }),
+                })
+                .json()
+            handlers.setState(categoryData.data)
+            setTotal(categoryData.total)
+        } catch (error) {
+            console.log(error)
+        }
     }
-  };
 
-  useEffect(() => {
-    handleFetchCategoryData();
-  }, [page, keyword, order, sort]);
+    useEffect(() => {
+        handleFetchCategoryData()
+    }, [page, keyword, order, sort])
 
-  const handleReset = () => {
-    router.push({
-      pathname: "/category",
-    });
-  };
+    const handleReset = () => {
+        router.push({
+            pathname: "/category",
+        })
+    }
 
-  const totalPage = Math.ceil(total / PAGE_SIZE);
-  return (
-    <CategoryDataContext.Provider value={{ categoryList, handlers }}>
-      <MainLayout title="Category" breadcrumbs={breadcrumbsItems}>
-        <Paper p={"md"} my={"md"} shadow="sm">
-          <Group justify="space-between">
-            <SearchBar />
-            <Group>
-              <Group>
-                <OrderCategory />
-                <SortCategory />
-                <ActionIcon color="red" size={"lg"} onClick={handleReset}>
-                  <IconX size={"1rem"} />
-                </ActionIcon>
-              </Group>
-              <Divider orientation="vertical" h={"100%"} />
-              <CreateCategoryBtn />
-            </Group>
-          </Group>
-        </Paper>
-        <Paper p={"md"} shadow="sm">
-          <CategoryTable />
-        </Paper>
-        <Group justify="center" my={"md"}>
-          <CategoryPagination total={totalPage} />
-        </Group>
-      </MainLayout>
-    </CategoryDataContext.Provider>
-  );
-};
+    const totalPage = Math.ceil(total / PAGE_SIZE)
+    return (
+        <CategoryDataContext.Provider value={{ categoryList, handlers }}>
+            <MainLayout title="Category" breadcrumbs={breadcrumbsItems}>
+                <Paper p={"md"} my={"md"} shadow="sm">
+                    <Group justify="space-between">
+                        <SearchBar />
+                        <Group>
+                            <Group>
+                                <OrderCategory />
+                                <SortCategory />
+                                <ActionIcon
+                                    color="red"
+                                    size={"lg"}
+                                    onClick={handleReset}
+                                >
+                                    <IconX size={"1rem"} />
+                                </ActionIcon>
+                            </Group>
+                            <Divider orientation="vertical" h={"100%"} />
+                            <CreateCategoryBtn />
+                        </Group>
+                    </Group>
+                </Paper>
+                <Paper p={"md"} shadow="sm">
+                    <CategoryTable />
+                </Paper>
+                <Group justify="center" my={"md"}>
+                    <CategoryPagination total={totalPage} />
+                </Group>
+            </MainLayout>
+        </CategoryDataContext.Provider>
+    )
+}
 
 export const getServerSideProps = async (
-  context: GetServerSidePropsContext
+    context: GetServerSidePropsContext
 ) => {
-  try {
-    const { req, query } = context;
-    const { page = "1", keyword, order, sort } = query;
+    try {
+        const { req, query } = context
+        const { page = "1", keyword, order, sort } = query
 
-    const res: CategoryResponse = await instance
-      .get(`categories`, {
-        searchParams: removeEmpty({
-          limit: PAGE_SIZE.toString(),
-          page: page.toString(),
-          keyword: keyword as string,
-          order: order as string,
-          sort: sort as string,
-        }),
-        headers: {
-          Cookie: req.headers.cookie || "",
-        },
-      })
-      .json();
-    return {
-      props: {
-        categoryData: res,
-      },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      notFound: true,
-    };
-  }
-};
-export default CategoryPage;
+        const res: CategoryResponse = await instance
+            .get(`categories`, {
+                searchParams: removeEmpty({
+                    limit: PAGE_SIZE.toString(),
+                    page: page.toString(),
+                    keyword: keyword as string,
+                    order: order as string,
+                    sort: sort as string,
+                }),
+                headers: {
+                    Cookie: req.headers.cookie || "",
+                },
+            })
+            .json()
+        return {
+            props: {
+                categoryData: res,
+            },
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            notFound: true,
+        }
+    }
+}
+export default CategoryPage

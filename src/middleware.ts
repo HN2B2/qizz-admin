@@ -14,7 +14,7 @@ export const config = {
     ],
 }
 
-export const publicRoutes: String[] = [
+export const publicRoutes: string[] = [
     "/404",
     "/auth/forgot-password",
     "/auth/reset-password",
@@ -55,20 +55,42 @@ export const middleware = async (req: NextRequest) => {
         (await verifyAuth(token).catch((error) => {
             console.error(error)
         }))
-
+    if (req.nextUrl.pathname === "/auth/profile") {
+        if (!userData) {
+            return null
+        }
+        if (verifiedToken) {
+            return NextResponse.json({
+                user: decodedUserData,
+                token,
+            })
+        }
+    }
     if (req.nextUrl.pathname === "/auth/logout") {
-        const response = NextResponse.redirect(new URL("/auth/login", req.url))
+        const redirect = req.nextUrl.searchParams.get("r")
+
+        const response = NextResponse.redirect(
+            new URL(
+                redirect ? `/auth/login?r=${redirect}` : "/auth/login",
+                req.url
+            )
+        )
         response.cookies.set("token", "", { expires: new Date(0) })
         response.cookies.set("user", "", { expires: new Date(0) })
         return response
     }
 
-    const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname)
-    const isAuthRoute = authRoutes.includes(req.nextUrl.pathname)
     const protectedRoute = protectedRoutes.find((route) =>
         req.nextUrl.pathname.startsWith(route.path)
     )
     const isProtectedRoute = !!protectedRoute
+
+    const isAuthRoute = authRoutes.includes(req.nextUrl.pathname)
+
+    const isPublicRoute =
+        publicRoutes.some((route) => req.nextUrl.pathname.startsWith(route)) &&
+        !isAuthRoute &&
+        !isProtectedRoute
 
     if (isPublicRoute) {
         return NextResponse.next()
@@ -81,16 +103,18 @@ export const middleware = async (req: NextRequest) => {
     }
 
     if (!token) {
-        return NextResponse.redirect(new URL("/auth/login", req.url))
+        return NextResponse.redirect(
+            new URL(` /auth/login?r=${req.nextUrl.pathname}`, req.url)
+        )
     }
 
     if (isProtectedRoute) {
-        if (protectedRoute.roles.includes(decodedUserData?.role)) {
+        if (protectedRoute.roles.includes(decodedUserData.role)) {
             return NextResponse.next()
         } else {
-            const url = req.nextUrl
-            url.pathname = `/404`
-            return NextResponse.rewrite(url)
+            return NextResponse.redirect(
+                new URL(`/auth/logout?r=${req.nextUrl.pathname}`, req.url)
+            )
         }
     }
 
@@ -98,5 +122,7 @@ export const middleware = async (req: NextRequest) => {
         return NextResponse.next()
     }
 
-    return NextResponse.redirect(new URL("/auth/login", req.url))
+    return NextResponse.redirect(
+        new URL(`/auth/login?r=${req.nextUrl.pathname}`, req.url)
+    )
 }
