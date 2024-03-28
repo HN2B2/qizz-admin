@@ -24,10 +24,14 @@ function BannedModal({ index, users, handlers }: IProps) {
   const handleBanUSer = async (id: number) => {
     form.values.banned = true;
     try {
-      const { data }: { data: UpdateBannedUserRequest } = await instance.put(
-        `/users/${id}`,
-        form.values
-      );
+      const data: UpdateBannedUserRequest = await instance
+        .put(`users/${id}`, {
+          json: {
+            role: form.values.role,
+            banned: form.values.banned,
+          },
+        })
+        .json();
       notifications.show({
         title: "Success",
         message: "Ban user successfully",
@@ -50,10 +54,14 @@ function BannedModal({ index, users, handlers }: IProps) {
   const handleRemoveBanUser = async (id: number) => {
     form.values.banned = false;
     try {
-      const { data }: { data: UpdateBannedUserRequest } = await instance.put(
-        `/users/${id}`,
-        form.values
-      );
+      const data: UpdateBannedUserRequest = await instance
+        .put(`users/${id}`, {
+          json: {
+            role: form.values.role,
+            banned: form.values.banned,
+          },
+        })
+        .json();
       notifications.show({
         title: "Success",
         message: "Remove ban for user successfully",
