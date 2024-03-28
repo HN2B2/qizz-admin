@@ -78,10 +78,13 @@ const DrawerContent = ({
       return;
     }
     try {
-      const { data }: { data: Category } = await instance.put(
-        `/categories/${category.id}`,
-        { ...category, ...updateCategoryForm.values }
-      );
+      const data: Category = await instance
+        .put(
+          `categories/${category.id}`,
+          // { ...category, ...updateCategoryForm.values }
+          { json: { ...category, ...updateCategoryForm.values } }
+        )
+        .json();
       notifications.show({
         color: "teal",
         title: "Success",
