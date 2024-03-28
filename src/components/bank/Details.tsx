@@ -4,18 +4,14 @@ import { ScrollArea, Title, Text, Group, Card, Box } from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import React, { useEffect } from "react";
 import ViewQuestionPaper from "../questions/ViewQuestionPaper";
-interface QuestionsResponse {
-  data: QuestionResponse[];
-  total: number;
-}
 function Details({ bankId }: { bankId: number }) {
   const [questions, questionsHandler] = useListState<QuestionResponse>([]);
   const fetchData = async () => {
     try {
-      const data: QuestionsResponse = await instance
+      const data: QuestionResponse[] = await instance
         .get(`question/all/bankId/${bankId}`)
         .json();
-      questionsHandler.setState(data.data);
+      questionsHandler.setState(data);
     } catch (error) {
       console.error(error);
     }

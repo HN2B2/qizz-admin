@@ -158,6 +158,7 @@ const BankTable = () => {
         </Grid.Col>
         <Grid.Col span={7} w={"100%"}>
           <Details bankId={bankId} />
+          <>{console.log(bankId)}</>
         </Grid.Col>
       </Grid>
 
