@@ -1,10 +1,11 @@
+export const runtime = "experimental-edge"
 import React, { createContext } from "react"
 import { useEffect } from "react"
 import { Container } from "@mantine/core"
 import { Flex, Paper } from "@mantine/core"
 import { ScrollArea, Group } from "@mantine/core"
 import GetAllUSerResponse from "@/types/users/GetAllUserResponse"
-import { instance } from "@/utils"
+import { instance, removeEmpty } from "@/utils"
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts"
 import { GetServerSidePropsContext } from "next"
 import UserTable from "../../components/manageUser/UserTable"
@@ -18,6 +19,7 @@ import {
 import { useRouter } from "next/router"
 import { useListState } from "@mantine/hooks"
 import UserFilter from "@/components/manageUser/UserFilter"
+import { Exception } from "@/types/exception"
 
 export const PAGE_SIZE: number = 5
 const PAGE: number = 1
@@ -53,19 +55,21 @@ const UserPage = ({ userData }: UserPageProps) => {
                 fetchPage = 1
             }
 
-            const { data: newData } = await instance.get(`/users`, {
-                params: {
-                    limit: PAGE_SIZE,
-                    page: fetchPage,
-                    keyword: keyword,
-                    order: order,
-                    sort: sort,
-                    role: role,
-                    banned: banned,
-                },
-            })
+            const data: GetAllUSerResponse = await instance
+                .get(`users`, {
+                    searchParams: removeEmpty({
+                        limit: PAGE_SIZE.toString(),
+                        page: fetchPage.toString(),
+                        keyword: keyword as string,
+                        order: order as string,
+                        sort: sort as string,
+                        role: role as string,
+                        banned: banned as string,
+                    }),
+                })
+                .json()
 
-            handlers.setState(newData.data)
+            handlers.setState(data.data)
         } catch (error) {
             console.log(error)
         }
@@ -120,29 +124,33 @@ export const getServerSideProps = async (
     try {
         const { req, query } = context
         const { page = PAGE, keyword, order, sort, role, banned } = query
-        const res = await instance.get(`/users`, {
-            params: {
-                limit: PAGE_SIZE,
-                page,
-                keyword,
-                order,
-                sort,
-                role,
-                banned,
-            },
-            withCredentials: true,
-            headers: {
-                Cookie: req.headers.cookie || "",
-            },
-        })
-        const userData = res.data
+        const res: GetAllUSerResponse = await instance
+            .get(`users`, {
+                searchParams: removeEmpty({
+                    limit: PAGE_SIZE.toString(),
+                    page: page.toString(),
+                    keyword: keyword as string,
+                    order: order as string,
+                    sort: sort as string,
+                    role: role as string,
+                    banned: banned as string,
+                }),
+                headers: {
+                    Cookie: req.headers.cookie || "",
+                },
+            })
+            .json()
         return {
             props: {
-                userData,
+                userData: res,
             },
         }
     } catch (error) {
-        console.log(error)
+        const { response }: any = error
+        if (response) {
+            const data: Exception = await response.json()
+            console.log(data.message)
+        }
         return {
             notFound: true,
         }

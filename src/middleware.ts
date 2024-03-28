@@ -4,11 +4,27 @@ import { UserResponse } from "./types/user"
 import { UserRole } from "./types/users/UserRole"
 
 export const config = {
-    matcher: ["/", "/auth/:path*", "/404", "/user/:path*", "/category/:path*"],
+    matcher: [
+        "/",
+        "/auth/:path*",
+        "/404",
+        "/user/:path*",
+        "/category/:path*",
+        "/notification/:path*",
+    ],
 }
 
-export const publicRoutes: string[] = ["/404"]
-export const authRoutes = ["/auth/login", "/auth/register"]
+export const publicRoutes: string[] = [
+    "/404",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+]
+export const authRoutes = [
+    "/auth/login",
+    "/auth/register",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+]
 export const protectedRoutes = [
     {
         path: "/",
@@ -20,6 +36,10 @@ export const protectedRoutes = [
     },
     {
         path: "/category",
+        roles: [UserRole.ADMIN, UserRole.STAFF],
+    },
+    {
+        path: "/notification",
         roles: [UserRole.ADMIN, UserRole.STAFF],
     },
 ]

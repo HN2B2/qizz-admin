@@ -54,10 +54,14 @@ function UpdateRoleModal({ index, users, handlers }: IProps) {
   const handleUpdateRole = async (id: number) => {
     form.validate();
     try {
-      const { data }: { data: UpdateRoleUserRequest } = await instance.put(
-        `/users/${id}`,
-        form.values
-      );
+      const data: UpdateRoleUserRequest = await instance
+        .put(`users/${id}`, {
+          json: {
+            role: form.values.role,
+            banned: form.values.banned,
+          },
+        })
+        .json();
       notifications.show({
         title: "Success",
         message: "Update user successfully",

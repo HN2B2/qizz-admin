@@ -3,17 +3,17 @@ import { IconSearch } from "@tabler/icons-react";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
+
 interface Query {
   [key: string]: string | string[] | undefined;
   keyword?: string | string[];
   order?: string;
   sort?: string;
-  role?: string | string[];
-  banned?: string | string[];
+  target?: string | string[];
 }
-const UserSearchName = () => {
+const NotificationSearch = () => {
   const router = useRouter();
-  const { keyword, role, banned } = router.query;
+  const { keyword, target } = router.query;
   const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
@@ -21,7 +21,6 @@ const UserSearchName = () => {
       setSearchKeyword((keyword as string) || "");
     }
   }, [router.isReady]);
-
   const handdleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!searchKeyword || searchKeyword.length === 0) {
@@ -31,20 +30,16 @@ const UserSearchName = () => {
       return;
     }
     const queryy: Query = {};
-    if (role) {
-      queryy.role = role;
-    }
-    if (banned) {
-      queryy.banned = banned;
+    if (target) {
+      queryy.target = target;
     }
     queryy.keyword = searchKeyword;
     router.push({
       query: queryy,
     });
   };
-
   return (
-    <form onClick={handdleSearch}>
+    <form onSubmit={handdleSearch}>
       <Group gap="3px" wrap="nowrap">
         <TextInput
           placeholder="Search"
@@ -69,4 +64,4 @@ const UserSearchName = () => {
     </form>
   );
 };
-export default UserSearchName;
+export default NotificationSearch;

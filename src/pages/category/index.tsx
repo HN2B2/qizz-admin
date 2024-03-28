@@ -1,3 +1,4 @@
+export const runtime = "experimental-edge"
 import {
     CategoryPagination,
     CategoryTable,
@@ -8,7 +9,7 @@ import {
 import SortCategory from "@/components/category/SortCategory"
 import { BreadCrumbsItem, MainLayout } from "@/components/layouts"
 import { Category } from "@/types/category"
-import { instance } from "@/utils"
+import { instance, removeEmpty } from "@/utils"
 import { ActionIcon, Divider, Group, Paper } from "@mantine/core"
 import { useListState } from "@mantine/hooks"
 import { IconX } from "@tabler/icons-react"
@@ -43,16 +44,17 @@ const CategoryPage = ({ categoryData }: CategoryPageProps) => {
 
     const handleFetchCategoryData = async () => {
         try {
-            const res = await instance.get(`/categories`, {
-                params: {
-                    limit: PAGE_SIZE,
-                    page,
-                    keyword,
-                    order,
-                    sort,
-                },
-            })
-            const categoryData = res.data
+            const res: CategoryResponse = await instance
+                .get(`categories`, {
+                    searchParams: removeEmpty({
+                        limit: PAGE_SIZE.toString(),
+                        page: page.toString(),
+                        keyword: keyword as string,
+                        order: order as string,
+                        sort: sort as string,
+                    }),
+                })
+                .json()
             handlers.setState(categoryData.data)
             setTotal(categoryData.total)
         } catch (error) {
@@ -112,23 +114,23 @@ export const getServerSideProps = async (
         const { req, query } = context
         const { page = "1", keyword, order, sort } = query
 
-        const res = await instance.get(`/categories`, {
-            params: {
-                limit: PAGE_SIZE,
-                page,
-                keyword,
-                order,
-                sort,
-            },
-            withCredentials: true,
-            headers: {
-                Cookie: req.headers.cookie || "",
-            },
-        })
-        const categoryData = res.data
+        const res: CategoryResponse = await instance
+            .get(`categories`, {
+                searchParams: removeEmpty({
+                    limit: PAGE_SIZE.toString(),
+                    page: page.toString(),
+                    keyword: keyword as string,
+                    order: order as string,
+                    sort: sort as string,
+                }),
+                headers: {
+                    Cookie: req.headers.cookie || "",
+                },
+            })
+            .json()
         return {
             props: {
-                categoryData,
+                categoryData: res,
             },
         }
     } catch (error) {
