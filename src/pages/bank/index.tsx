@@ -139,15 +139,6 @@ const BankPage = ({ bankData }: BankPageProps) => {
               </Group>
             </Paper>
           </Grid.Col>
-          {/* <Grid.Col span={6}>
-            <Paper p={"md"} my={"md"} shadow="sm">
-              <Group justify="space-between">
-                <Group>
-                  <Details />
-                </Group>
-              </Group>
-            </Paper>
-          </Grid.Col> */}
         </Grid>
       </MainLayout>
     </BankDataContext.Provider>

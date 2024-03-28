@@ -52,7 +52,10 @@ const CategoryFilter = () => {
   const indeterminate = values.some((value) => value.checked) && !allChecked;
   const router = useRouter();
   const { keyword, order, sort, page, subCategoryIds } = router.query;
-
+  interface CategoryResponse {
+    data: Category[];
+    total: number;
+  }
   useEffect(() => {
     // const fetchCategories = async () => {
     //   try {
@@ -72,7 +75,7 @@ const CategoryFilter = () => {
     const fetchCategories = async () => {
       try {
         // const response = await fetch("http://localhost:6868/v1/categories");
-        const { data } = await instance.get("/categories");
+        const data: CategoryResponse = await instance.get("categories").json();
 
         handlerCategories.setState(data.data);
       } catch (error) {
