@@ -53,17 +53,6 @@ const ViewQuestionPaper = ({
                     </Flex>
                 </Flex>
             </Stack>
-
-            {/* <Text mt={20}>{question.content}</Text>
-      <SimpleGrid cols={2} verticalSpacing="lg" mt={20}>
-        <div>
-          {<IconCircleFilled size={10} />}
-          {question.answersMetadata}
-        </div>
-        <div>{question.answersMetadata}</div>
-        <div>{question.answersMetadata}</div>
-        <div>{question.answersMetadata}</div>
-      </SimpleGrid> */}
             {QuestionTypes[questionType]}
         </Paper>
     )

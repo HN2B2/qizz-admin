@@ -1,3 +1,4 @@
+export const runtime = "experimental-edge";
 import Head from "next/head";
 import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
