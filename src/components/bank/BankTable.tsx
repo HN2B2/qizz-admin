@@ -24,7 +24,7 @@ import BankPagination from "./BankPagination";
 import { Details } from ".";
 
 const BankTable = () => {
-  const { bankList, handlers, total } = useContext(BankDataContext); // Now destructuring setBankList as well
+  const { bankList, handlers, total, setTotal } = useContext(BankDataContext); // Now destructuring setBankList as well
   const modals = useModals(); // Correct usage of modals
   const [bankId, setBankId] = useState<number>(bankList[0]?.quizBankId || 0);
 
@@ -34,6 +34,7 @@ const BankTable = () => {
       handlers.setState((currentList: any[]) =>
         currentList.filter((bank) => bank.id !== bankId)
       );
+      setTotal(total - 1);
       showNotification({
         color: "teal",
         title: "Success",
