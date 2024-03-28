@@ -31,8 +31,8 @@ const BankTable = () => {
 
   const handleDeleteBank = async (bankId: number) => {
     try {
+      console.log("show bank id:", bankId);
       await instance.delete(`manageBanks/${bankId}`);
-      console.log(bankId);
       handlers.setState((currentList: any[]) =>
         currentList.filter((bank) => bank.id !== bankId)
       );
@@ -158,7 +158,6 @@ const BankTable = () => {
         </Grid.Col>
         <Grid.Col span={7} w={"100%"}>
           <Details bankId={bankId} />
-          <>{console.log(bankId)}</>
         </Grid.Col>
       </Grid>
 
