@@ -48,7 +48,7 @@ const DrawerContent = ({
   const router = useRouter();
   const handleDeleteCategory = async () => {
     try {
-      await instance.delete(`/categories/${category.id}`);
+      await instance.delete(`categories/${category.id}`);
       router.reload();
       notifications.show({
         color: "teal",
