@@ -56,17 +56,6 @@ export const middleware = async (req: NextRequest, res: NextResponse) => {
         (await verifyAuth(token).catch((error) => {
             console.error(error)
         }))
-    if (req.nextUrl.pathname === "/auth/profile") {
-        if (!userData) {
-            return null
-        }
-        if (verifiedToken) {
-            return NextResponse.json({
-                user: decodedUserData,
-                token,
-            })
-        }
-    }
 
     const protectedRoute = protectedRoutes.find((route) =>
         req.nextUrl.pathname.startsWith(route.path)

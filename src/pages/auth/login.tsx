@@ -77,11 +77,7 @@ const LoginPage = () => {
                 })
                 .json()
             setUser(data.user)
-            if (r) {
-                router.push(r as string)
-            } else {
-                router.push("/")
-            }
+            router.reload()
         } catch (error) {
             notifications.show({
                 title: "Error",
