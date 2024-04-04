@@ -1,5 +1,7 @@
 import ky from "ky"
 import { Exception } from "@/types/exception"
+import { ListResponse } from "@/types/ListResponse"
+import { Bank } from "@/types/bank"
 
 export const instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -42,13 +44,21 @@ export const getServerErrorNoti = (error: any) => {
     }
 }
 
-export const convertDate = (date: string) => {
-    const d = new Date(date)
-    return d.toLocaleDateString("vi-VI", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    })
+export const convertDate = (date: string, outputPattern = "dd/mm/yyyy") => {
+    // get date follow input pattern
+    const datePattern = /(\d{4})-(\d{2})-(\d{2})/
+    const [, year, month, day] = datePattern.exec(date) || []
+    const dateObj = new Date(`${month}/${day}/${year}`)
+    // get date follow output pattern
+    const dayString = dateObj.getDate().toString().padStart(2, "0")
+    const monthString = (dateObj.getMonth() + 1).toString().padStart(2, "0")
+    const yearString = dateObj.getFullYear().toString()
+    const dateMap: { [key: string]: string } = {
+        dd: dayString,
+        mm: monthString,
+        yyyy: yearString,
+    }
+    return outputPattern.replace(/dd|mm|yyyy/g, (matched) => dateMap[matched])
 }
 
 export const removeEmpty = (obj: any) => {
@@ -58,4 +68,24 @@ export const removeEmpty = (obj: any) => {
         else if (obj[key] !== undefined) newObj[key] = obj[key]
     })
     return newObj
+}
+
+export const getChartData = (listData: ListResponse<Bank> | undefined) => {
+    if (!listData) return []
+    const { data } = listData
+    const dataChart: { date: string; totalBank: number }[] = []
+    data.forEach((item) => {
+        const date = convertDate(item.createdAt, "dd/mm")
+        const index = dataChart.findIndex((x) => x.date === date)
+        if (index === -1) {
+            dataChart.push({ date, totalBank: 1 })
+        } else {
+            dataChart[index].totalBank++
+        }
+    })
+    return dataChart.sort((a, b) => {
+        const dateA = new Date(a.date)
+        const dateB = new Date(b.date)
+        return dateA.getTime() - dateB.getTime()
+    })
 }
