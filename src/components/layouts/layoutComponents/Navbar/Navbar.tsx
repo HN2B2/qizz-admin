@@ -1,4 +1,5 @@
 import { AppShell, NavLink } from "@mantine/core"
+import Link from "next/link"
 import { useRouter } from "next/router"
 
 interface NavbarItem {
@@ -17,6 +18,7 @@ const Navbar = ({ navbarItems }: NavbarProps) => {
         <AppShell.Navbar p="md">
             {navbarItems.map((item, index) => (
                 <NavLink
+                    component={Link}
                     href={item.link || "#"}
                     key={index}
                     label={item.title}

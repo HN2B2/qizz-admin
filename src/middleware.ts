@@ -45,7 +45,7 @@ export const protectedRoutes = [
     },
 ]
 
-export const middleware = async (req: NextRequest) => {
+export const middleware = async (req: NextRequest, res: NextResponse) => {
     const token = req.cookies.get("token")?.value
     const userData = req.cookies.get("user")?.value
     const decodedUserData: UserResponse =
@@ -67,7 +67,7 @@ export const middleware = async (req: NextRequest) => {
             })
         }
     }
-    if (req.nextUrl.pathname === "/auth/logout") {
+    if (req.nextUrl.pathname.startsWith("/auth/logout")) {
         const redirect = req.nextUrl.searchParams.get("r")
 
         const response = NextResponse.redirect(
@@ -76,8 +76,23 @@ export const middleware = async (req: NextRequest) => {
                 req.url
             )
         )
-        response.cookies.set("token", "", { expires: new Date(0) })
-        response.cookies.set("user", "", { expires: new Date(0) })
+        const cookies = req.headers.get("cookie")
+
+        if (cookies) {
+            const token = cookies
+                .split(";")
+                .find((c) => c.trim().startsWith("token"))
+            if (token) {
+                response.cookies.delete("token")
+            }
+            const user = cookies
+                .split(";")
+                .find((c) => c.trim().startsWith("user"))
+            if (user) {
+                response.cookies.delete("user")
+            }
+        }
+
         return response
     }
 
