@@ -83,12 +83,14 @@ export const middleware = async (req: NextRequest, res: NextResponse) => {
                 .split(";")
                 .find((c) => c.trim().startsWith("token"))
             if (token) {
+                response.cookies.set("token", "a")
                 response.cookies.delete("token")
             }
             const user = cookies
                 .split(";")
                 .find((c) => c.trim().startsWith("user"))
             if (user) {
+                response.cookies.set("user", "a")
                 response.cookies.delete("user")
             }
         }
