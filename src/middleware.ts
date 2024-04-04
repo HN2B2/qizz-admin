@@ -67,36 +67,6 @@ export const middleware = async (req: NextRequest, res: NextResponse) => {
             })
         }
     }
-    if (req.nextUrl.pathname.startsWith("/auth/logout")) {
-        const redirect = req.nextUrl.searchParams.get("r")
-
-        const response = NextResponse.redirect(
-            new URL(
-                redirect ? `/auth/login?r=${redirect}` : "/auth/login",
-                req.url
-            )
-        )
-        const cookies = req.headers.get("cookie")
-
-        if (cookies) {
-            const token = cookies
-                .split(";")
-                .find((c) => c.trim().startsWith("token"))
-            if (token) {
-                response.cookies.set("token", "a")
-                response.cookies.delete("token")
-            }
-            const user = cookies
-                .split(";")
-                .find((c) => c.trim().startsWith("user"))
-            if (user) {
-                response.cookies.set("user", "a")
-                response.cookies.delete("user")
-            }
-        }
-
-        return response
-    }
 
     const protectedRoute = protectedRoutes.find((route) =>
         req.nextUrl.pathname.startsWith(route.path)

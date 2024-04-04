@@ -1,16 +1,15 @@
 import {
-    ActionIcon,
     AppShell,
     Burger,
     Button,
     Group,
     Image,
     useComputedColorScheme,
-    useMantineColorScheme,
 } from "@mantine/core"
-// import { IconMoon, IconSun } from "@tabler/icons-react"
-import classes from "./SwitchSchemeBtn.module.css"
 import Link from "next/link"
+import { instance } from "@/utils"
+import { useState } from "react"
+import { useRouter } from "next/router"
 
 const Logo = () => {
     const colorScheme = useComputedColorScheme("light")
@@ -41,13 +40,18 @@ const Header = ({
     desktopOpened,
     toggleDesktop,
 }: HeaderProps) => {
-    const { setColorScheme } = useMantineColorScheme({
-        keepTransitions: true,
-    })
-    const computedColorScheme = useComputedColorScheme("light")
-
-    const toggleColorScheme = () => {
-        setColorScheme(computedColorScheme === "dark" ? "light" : "dark")
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const handleSignOut = async () => {
+        setLoading(true)
+        try {
+            await instance.post("auth/logout")
+            router.reload()
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -73,18 +77,11 @@ const Header = ({
                     <Logo />
                 </Group>
                 <Group>
-                    <ActionIcon
-                        color="gray"
-                        size="lg"
-                        variant="outline"
-                        onClick={toggleColorScheme}
-                        aria-label="Toggle color scheme"
-                        radius="md"
+                    <Button
+                        loading={loading}
+                        onClick={handleSignOut}
+                        color="red"
                     >
-                        {/* <IconSun stroke={1.5} className={classes.light} />
-            <IconMoon stroke={1.5} className={classes.dark} /> */}
-                    </ActionIcon>
-                    <Button component={Link} href="/auth/logout" color="red">
                         Sign out
                     </Button>
                 </Group>
