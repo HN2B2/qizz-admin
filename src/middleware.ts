@@ -4,6 +4,7 @@ import { UserResponse } from "./types/user"
 import { UserRole } from "./types/users/UserRole"
 
 export const config = {
+    runtime: "edge",
     matcher: [
         "/",
         "/auth/:path*",
