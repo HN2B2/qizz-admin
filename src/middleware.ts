@@ -4,7 +4,7 @@ import { UserResponse } from "./types/user"
 import { UserRole } from "./types/users/UserRole"
 
 export const config = {
-    runtime: "experimental-edge",
+    // runtime: "experimental-edge",
     matcher: [
         "/",
         "/auth/:path*",
