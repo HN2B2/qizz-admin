@@ -2,6 +2,13 @@ import ky from "ky"
 import { Exception } from "@/types/exception"
 import { ListResponse } from "@/types/ListResponse"
 import { Bank } from "@/types/bank"
+import { generateHTML, JSONContent } from "@tiptap/react"
+import Highlight from "@tiptap/extension-highlight"
+import StarterKit from "@tiptap/starter-kit"
+import Underline from "@tiptap/extension-underline"
+import TextAlign from "@tiptap/extension-text-align"
+import Superscript from "@tiptap/extension-superscript"
+import SubScript from "@tiptap/extension-subscript"
 
 export const instance = ky.create({
     prefixUrl: process.env.NEXT_PUBLIC_API_URL,
@@ -88,4 +95,20 @@ export const getChartData = (listData: ListResponse<Bank> | undefined) => {
         const dateB = new Date(b.date)
         return dateA.getTime() - dateB.getTime()
     })
+}
+
+export const renderHTML = (json: string) => {
+    try {
+        const parsedJson: JSONContent = JSON.parse(json)
+        return generateHTML(parsedJson, [
+            StarterKit,
+            Highlight,
+            Underline,
+            TextAlign,
+            Superscript,
+            SubScript,
+        ])
+    } catch (error) {
+        return "Error parsing question"
+    }
 }
