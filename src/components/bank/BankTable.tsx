@@ -67,8 +67,7 @@ const BankTable = () => {
         })
     }
 
-    const defaultImageUrl =
-        "https://images.unsplash.com/photo-1579227114347-15d08fc37cae?ixid=MnwxMjA3fDB8MHxwaG90by1wYWge&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"
+    const defaultImageUrl = "/common/quiz.jpg"
 
     const handleOnMouseEnter = (bankId: number) => {
         setBankId(bankId)
