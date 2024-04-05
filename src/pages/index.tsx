@@ -84,7 +84,7 @@ export default function Home() {
     const handleFetchData = async () => {
         try {
             const res1: ListResponse<Bank> = await instance
-                .get("bank/all?limit=100")
+                .get("manageBanks?limit=100")
                 .json()
             setTotalBank(res1)
 
