@@ -87,7 +87,6 @@ const BankTable = () => {
                             shadow="sm"
                             component={Link}
                             href={"#"}
-                            target="_blank"
                             m="5px"
                             onMouseEnter={() => {
                                 handleOnMouseEnter(bank.quizBankId)
